@@ -132,7 +132,7 @@ html {
 }
 
 /* Responsivo */
-@media (max-width: 767px) {
+@media (max-width: 900px) {
     .hamburger {
         display: block;
     }
@@ -1019,7 +1019,7 @@ html {
 }
 
 /* Responsive */
-@media(max-width:768px){
+@media(max-width:900px){
   .overline-services-grid {
     grid-template-columns: repeat(1, 1fr); /* 2 columnas en mobile */
   }
@@ -3477,7 +3477,7 @@ footer {
     // Detectar resolución
     function getSuffixByDevice() {
       const w = window.innerWidth;
-      if (w < 768) return "-MOBILE";
+      if (w < 900) return "-MOBILE";
       return "-desktop";
     }
     const suffix = getSuffixByDevice();
@@ -3606,7 +3606,7 @@ document.querySelectorAll('.menu-lateral a').forEach(link => {
         setTimeout(() => img.src = staticSrc, 1000); // vuelve a PNG después de 1s
 
         // En móvil, cerrar menú al hacer clic
-        if (window.innerWidth <= 767) {
+        if (window.innerWidth <= 900) {
             document.getElementById('menuLateral').classList.remove('active');
         }
     });
