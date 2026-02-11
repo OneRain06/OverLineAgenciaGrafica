@@ -1,0 +1,3930 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+    <link rel="icon" href="logo-overline.webp" type="image/webp">
+  <title>Overline</title>
+  <!-- Fuente Poppins -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+.video-wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: -1;
+}
+
+#video-fondo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: grayscale(50%);
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #212121;
+  opacity: 0.30; 
+  pointer-events: none; 
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+/* Menú lateral */
+.menu-lateral {
+    position: fixed;
+    top: 50%;
+    left: -40px; /* medio escondido */
+    transform: translateY(-50%);
+    width: 40px;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(6px);
+    border-radius: 0 20px 20px 0;
+    box-shadow: 2px 0 8px rgba(0,0,0,0.2);
+    padding: 20px 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    transition: left 0.3s ease-in-out;
+    z-index: 1000;
+}
+
+.menu-lateral.active {
+    left: 0;
+}
+
+/* Flecha indicadora (solo desktop) */
+.flecha {
+    position: absolute;
+    right: -20px;
+    top: 50%;
+    transform: translateY(-50%) rotate(0deg); /* orientación inicial */
+    background: #017096;
+    color: white;
+    padding: 6px;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    transition: transform 0.3s ease; /* animación suave */
+}
+
+/* Cuando el menú está activo, rota la flecha */
+.menu-lateral.active .flecha {
+    transform: translateY(-50%) rotate(180deg);
+}
+
+
+/* Links */
+.menu-lateral a {
+    position: relative;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 8px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.menu-lateral a img {
+    width: 28px;
+    height: auto;
+    margin-right: 10px;
+    transition: transform 0.3s;
+}
+
+.menu-lateral a:hover img {
+    transform: scale(1.2);
+}
+
+/* Tooltip */
+.tooltip {
+    position: absolute;
+    left: 40px;
+    background: rgba(0,0,0,0.7);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 12px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s;
+}
+
+/* Botón hamburguesa */
+.hamburger {
+    position: fixed;
+    top: 15px;
+    left: 15px;
+    font-size: 28px;
+    cursor: pointer;
+    z-index: 1100;
+    display: none;
+}
+
+/* Responsivo */
+@media (max-width: 767px) {
+    .hamburger {
+        display: block;
+    }
+    .menu-lateral {
+        top: auto;
+        bottom: 300px;
+        left: -180px;
+        transform: none;
+        height: auto;
+        border-radius: 0 20px 20px 0;
+        padding: 15px 10px;
+    }
+    .flecha {
+        display: none; /* oculta flecha en móvil */
+    }
+}
+
+
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      overflow-x: hidden;
+      color: #fff;
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+    }
+
+    section {
+      height: 100vh;
+      position: relative;
+      z-index: 1;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: 0;
+    }
+
+    canvas {
+      display: block;
+      width: 100vw;
+      height: 100vh;
+      background: transparent;
+      position: relative;
+      z-index: 1;
+    }
+
+   .phone-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.phone {
+  position: relative;
+  width: 375px;
+  height: 812px;
+  background: url('mockup-phone.webp') no-repeat center center;
+  background-size: cover;
+}
+.phone-overlay {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none; /* evita bloquear clics */
+  z-index: 10;          /* asegura que esté por encima del contenido */
+}
+
+.screen {
+  position: absolute;
+  top: 15px;   /* ajusta según tu mockup */
+  left: 20px;  /* ajusta según tu mockup */
+  width: 340px;
+  height: 786px;
+  border-radius: 40px;
+  background: #fff;
+  overflow-y: scroll;
+  scrollbar-width: none;
+  z-index: 5;  /* debajo del overlay pero interactivo */
+}
+.screen::-webkit-scrollbar { display: none; }
+
+
+
+.insta-header, .insta-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  background: #fff;
+  border-bottom: 1px solid #ddd;
+}
+
+.insta-footer {
+  position: sticky;
+  bottom: 0;
+  border-top: 1px solid #ddd;
+  padding: 10px 20px;
+}
+
+.carousel {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px;
+}
+
+.card {
+  background: #fafafa;
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  transform: scale(0.95);
+  opacity: 0;
+}
+
+.card img {
+  width: 100%;
+  display: block;
+}
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* avatar+nombre a la izquierda, icono a la derecha */
+  padding: 8px;
+}
+
+.card-header-left {
+  display: flex;
+  align-items: center;
+  gap: 8px; /* espacio entre avatar y nombre */
+}
+
+.avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: contain; /* mantiene proporción dentro del cuadro */
+}
+
+.username {
+  font-weight: 600;
+  color: #000;
+}
+
+.post-img {
+  width: 100%;
+  display: block;
+}
+
+.card-actions {
+  display: flex;
+  gap: 12px;
+  padding: 8px;
+}
+.icon {
+  width: 24px;   /* tamaño fijo */
+  height: 24px;  /* tamaño fijo */
+  object-fit: contain; /* mantiene proporción dentro del cuadro */
+  display: inline-block;
+}
+
+.icon-small {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+  display: inline-block;
+}
+
+
+.card-likes {
+  padding: 0 8px;
+  font-size: 14px;
+  color: #000; /* color texto likes */
+}
+.card-description {
+  padding: 0 8px;
+  font-size: 14px;
+  color: #000; /* color texto descripción */
+}
+.card-description b {
+  margin-right: 4px;
+}
+.card-comments {
+  padding: 0 8px;
+  font-size: 14px;
+  color: #555; /* color texto comentarios */
+  cursor: pointer;
+}
+.card-date {
+  padding: 0 8px 8px;
+  font-size: 12px;
+  color: #888; /* color texto fecha */
+}
+
+.status-bar {
+  position: sticky; /* se queda fijo arriba */
+  top: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background: #fff;
+  border-bottom: 1px solid #ddd;
+  z-index: 20; /* encima del feed */
+}
+
+.status-bar .time {
+  font-size: 12px;
+  font-weight: 600;
+  color: #000;
+}
+
+.status-icons {
+  display: flex;
+  gap: 6px;
+}
+
+.status-icon {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+}
+.stories-bar {
+  display: flex;
+  gap: 12px;
+  padding: 8px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.stories-bar::-webkit-scrollbar { display: none; }
+
+.story {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 64px;
+  flex-shrink: 0;
+}
+
+.story-avatar {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: 2px solid #ff004f; /* aro de story activa */
+  object-fit: cover;
+}
+
+.story-name {
+  margin-top: 4px;
+  font-size: 12px;
+  color: #000;
+  text-align: center;
+  white-space: nowrap;
+}
+
+/* Story especial para agregar */
+.add-story .story-avatar-wrapper {
+  position: relative;
+  width: 56px;
+  height: 56px;
+}
+.add-story .story-avatar {
+  border: 2px solid #ccc; /* gris para indicar que no hay story */
+}
+.add-story .add-icon {
+  position: absolute;
+  bottom: -2px;
+  right: -2px;
+  background: #0095f6; /* azul estilo Instagram */
+  color: #fff;
+  font-weight: bold;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 14px;
+}
+/* ====== POPUP GENERAL ====== */
+.popup-ig {
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.6);
+  z-index: 9999;
+}
+.popup-ig-content {
+  position: relative;
+  width: 375px;
+  height: 812px;
+  margin: 5% auto;
+  background: transparent;
+  border-radius: 40px;
+}
+
+/* ====== MOCKUP ====== */
+.popup-ig-overlay {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  z-index: 100;              /* siempre encima */
+  pointer-events: none;      /* no bloquea interacción */
+}
+.popup-ig-screen { 
+  position: absolute; 
+  top: 12px; 
+  left: 20px; 
+  width: 340px; 
+  height: 796px; 
+  background: #fff; 
+  border-radius: 24px; 
+  display: flex; 
+  flex-direction: column; 
+  overflow-y: scroll;        /* scroll en toda la pantalla */ 
+  scrollbar-width: none;     /* oculta barra en Firefox */
+}
+.popup-ig-screen::-webkit-scrollbar { display: none; }
+
+/* ====== STATUS BAR ====== */
+.popup-ig-statusbar {
+  position: sticky;
+  top: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 20px;
+  background: #fff;
+  border-bottom: 1px solid #ddd;
+  z-index: 20;
+}
+.popup-ig-time {
+  font-size: 12px;
+  font-weight: 600;
+  color: #000;
+}
+.popup-ig-statusicons {
+  display: flex;
+  gap: 6px;
+}
+.popup-ig-statusicon {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+}
+
+/* ====== PROFILE HEADER ====== */
+.popup-ig-profileheader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px;
+}
+.popup-ig-avatar {
+  width: 64px; height: 64px;
+  border-radius: 50%;
+  margin-right: 12px;
+}
+.popup-ig-profileinfo {
+  flex-grow: 1;
+}
+.popup-ig-profilename {
+  font-weight: 600;
+  color: #000;
+  display: block;
+}
+.popup-ig-profilenote {
+  font-size: 12px;
+  color: #555;
+}
+.popup-ig-iconoptions {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+  cursor: pointer;
+}
+
+/* ====== STATS ====== */
+.popup-ig-profilestats {
+  display: flex;
+  justify-content: space-around;
+  padding: 12px;
+  border-top: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+}
+.popup-ig-stat {
+  text-align: center;
+}
+.popup-ig-statnumber {
+  font-weight: 600;
+  color: #000;
+  display: block;
+}
+.popup-ig-statlabel {
+  font-size: 12px;
+  color: #555;
+}
+
+/* ====== DESCRIPTION ====== */
+.popup-ig-profiledesc {
+  padding: 12px;
+  font-size: 14px;
+  color: #000;
+}
+
+/* ====== TABS ====== */
+.popup-ig-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  border-top: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+  padding: 8px;
+}
+.popup-ig-tab {
+  font-size: 14px;
+  color: #555;
+  cursor: pointer;
+}
+.popup-ig-tab.active {
+  font-weight: 600;
+  color: #000;
+}
+
+/* ====== FEED ====== */
+.popup-ig-feed { 
+  display: flex; 
+  flex-direction: column; 
+  gap: 16px; 
+  padding: 12px; 
+}
+.popup-ig-feeditem img { 
+  width: 100%; 
+  border-radius: 12px; 
+  display: block; 
+}
+
+/* ====== FOOTER ====== */
+.popup-ig-footer { 
+  position: sticky; 
+  bottom: 0; 
+  display: flex; 
+  justify-content: space-around; 
+  align-items: center; 
+  padding: 15px 16px;
+  background: #fff; 
+  border-top: 1px solid #ddd; 
+  z-index: 20;
+} 
+.popup-ig-footericon { 
+  width: 24px; 
+  height: 24px; 
+  object-fit: contain; 
+}
+  
+	.popup-ig-feeditem video {
+  width: 100%;
+  border-radius: 12px;
+  display: block;
+  background: #000; /* fondo negro para que se vea como Instagram */
+}
+
+
+.popup-odc { 
+	background: rgba(0, 42, 76, 0.8); /* rojo suave */ }
+.popup-gus { 
+	background: rgba(66, 87, 40, 0.8); /* rojo suave */ }
+.popup-necio { 
+	background: rgba(0, 56, 32, 0.8); /* rojo suave */ }
+.popup-sm { 
+	background: rgba(101, 104, 95, 0.8); /* rojo suave */ }
+.popup-rebel { 
+	background: rgba(0, 0, 0, 0.8); /* rojo suave */ }
+.popup-lyg { 
+	background: rgba(255, 123, 8, 0.8); /* rojo suave */ }
+.popup-over { 
+	background: rgba(4, 139, 187, 0.8); /* rojo suave */ }
+.popup-jb { 
+	background: rgba(255, 131, 0, 0.8); /* rojo suave */ }
+.popup-byg { 
+	background: rgba(243, 224, 188, 0.8); /* rojo suave */ }
+	
+	  
+.overline-services-container {
+  max-height: 600px;   /* ajusta según tu diseño */
+  overflow-y: auto;
+  padding: 10px;
+  border: 1px solid #eee;
+  border-radius: 8px;
+}
+
+.overline-title {
+  text-align: center;
+  font-size: 2rem;
+  margin: 20px 0;
+  color: #fafafa;
+}
+
+/* Filtros */
+.overline-filters {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.overline-filters button {
+  background: #eee;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.2s ease;
+}
+
+.overline-filters button:hover {
+  background: #ddd;
+}
+
+/* Grid de servicios */
+.overline-services-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  padding: 20px;
+}
+
+/* Estilo base de la tarjeta */
+.overline-card {
+  position: relative;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  padding: 20px;
+  margin: 15px;
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInUp 0.6s ease forwards;
+}
+
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Etiqueta interna de categoría */
+.overline-card::before {
+  content: attr(data-category);
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background: rgba(0,0,0,0.05);
+  color: #333;
+  font-size: 0.75rem;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-weight: 600;
+}
+
+/* Ícono asomado detrás: estilo base */
+.overline-card::after {
+  position: absolute;
+  font-size: 4rem;
+  color: rgba(0,0,0,0.10);
+  right: -10px;
+  bottom: -10px;
+  transform: rotate(-15deg);
+  pointer-events: none;
+}
+
+/* Ícono según categoría */
+.overline-card[data-category="audiovisual"]::after {
+  content: "🎬";
+}
+.overline-card[data-category="branding"]::after {
+  content: "🎨";
+}
+.overline-card[data-category="fotografia"]::after {
+  content: "📸";
+}
+.overline-card[data-category="redes"]::after {
+  content: "📱";
+}
+.overline-card[data-category="papeleria"]::after {
+  content: "📝";
+}
+.overline-card[data-category="streaming"]::after {
+  content: "🎮";
+}
+.overline-card[data-category="copy"]::after {
+  content: "✍️";
+}
+.overline-card[data-category="eventos"]::after {
+  content: "🎉";
+}
+.overline-card[data-category="extras"]::after {
+  content: "➕";
+}
+
+/* Hover elegante */
+.overline-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+}
+
+/* Estilos internos */
+.overline-card h3 {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  margin-bottom: 8px;
+	color: #212121;
+}
+
+.overline-price {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.95rem;
+  color: #444;
+  background: #f7f7f7;
+  padding: 6px 10px;
+  border-radius: 6px;
+  display: inline-block;
+}
+
+
+.overline-actions {
+  display: flex;
+  justify-content: space-between;
+}
+
+.overline-btn-add,
+.overline-btn-info {
+  border: none;
+  padding: 10px 15px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.overline-btn-add {
+  background: #048bbb;
+  color: #fff;
+}
+
+.overline-btn-add:hover {
+  background: #274a9b;
+}
+
+.overline-btn-info {
+  background: #eee;
+  color: #333;
+}
+
+.overline-btn-info:hover {
+  background: #ddd;
+}
+
+/* Botón carrito */
+#overline-cart-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 30px auto;
+  background: #00c853;
+  color: #fff;
+  border-radius: 50%;
+  width: 70px;
+  height: 70px;
+  font-size: 1.5rem;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+#overline-cart-button span {
+  background: #fff;
+  color: #00c853;
+  border-radius: 50%;
+  padding: 2px 6px;
+  font-size: 0.9rem;
+  margin-left: 5px;
+}
+
+/* Modal carrito */
+.overline-cart-modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0; top: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.5);
+}
+
+.overline-cart-content {
+  background: #fff;
+  margin: auto;
+  margin-top: 5%;
+  padding: 20px;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 500px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+}
+
+.overline-cart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+	  .overline-cart-header h3{
+  color: #212121;
+}
+	  .overline-cart-header p{
+  color: #212121;
+}
+	  .overline-cart-header span{
+  color: #212121;
+}
+
+.overline-cart-close {
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+#overline-cart-items {
+  list-style: none;
+  padding: 0;
+  margin: 15px 0;
+  max-height: 200px;
+  overflow-y: auto;
+  color: #212121;
+}
+
+#overline-cart-items li {
+  padding: 8px 0;
+  border-bottom: 1px solid #212121;
+  font-size: 0.95rem;
+}
+
+/* Botones dentro del carrito */
+#overline-cart-items button {
+  border: none;
+  margin-left: 5px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  transition: background 0.2s ease;
+}
+
+/* Botón aumentar */
+#overline-cart-items button.increase {
+  background: #048bbb;
+  color: #fff;
+}
+#overline-cart-items button.increase:hover {
+  background: #274a9b;
+}
+
+/* Botón disminuir */
+#overline-cart-items button.decrease {
+  background: #00c853;
+  color: #fff;
+}
+#overline-cart-items button.decrease:hover {
+  background: #e65c00;
+}
+
+/* Botón eliminar */
+#overline-cart-items button.remove {
+  background: #c0392b;
+  color: #fff;
+}
+#overline-cart-items button.remove:hover {
+  background: #a93226;
+}
+
+/* Botón vaciar carrito */
+.overline-cart-summary button {
+  background: #999;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  margin-top: 10px;
+  transition: background 0.2s ease;
+}
+.overline-cart-summary p {
+  color: #212121;
+}
+
+.overline-cart-summary button:hover {
+  background: #777;
+}
+
+/* Formulario dentro del carrito */
+.overline-cart-form {
+  margin-top: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.overline-cart-form label {
+  font-weight: bold;
+  font-size: 0.9rem;
+  color: #333;
+}
+
+.overline-cart-form input,
+.overline-cart-form textarea {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  width: 100%;
+}
+
+.overline-cart-form textarea {
+  min-height: 60px;
+}
+
+.overline-btn-quote {
+  background: #00c853;
+  color: #fff;
+  border: none;
+  padding: 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: bold;
+  width: 100%;
+  margin-top: 15px;
+}
+
+.overline-btn-quote:hover {
+  background: #e65c00;
+}
+
+/* Modal info */
+.overline-modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0; top: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.5);
+}
+
+.overline-modal-content {
+  background: #fff;
+  margin: auto;
+  margin-top: 10%;
+  padding: 20px;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 400px;
+}
+	  .overline-modal-content h3{
+    color: #212121;
+}
+	  .overline-modal-content p{
+    color: #212121;
+}
+
+.overline-close {
+  float: right;
+  font-size: 1.5rem;
+  cursor: pointer;
+    color: #212121;
+}
+
+/* Responsive */
+@media(max-width:768px){
+  .overline-services-grid {
+    grid-template-columns: repeat(1, 1fr); /* 2 columnas en mobile */
+  }
+}
+	  .iva{
+    color: #212121;
+		  font-size: 10px;
+  }
+	  /*modelos----------------------------------------------------*/
+/* Sección general */
+#portafolio-modelos {
+  padding: 40px 20px;
+}
+
+/* Carrusel */
+.carousel-modelos {
+	top: 20px;
+	bottom: 20px;
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  gap: 10px;
+  padding: 10px;
+}
+.carousel-modelos::-webkit-scrollbar { display: none; }
+
+/* Tarjeta */
+.modelo-card {
+  flex: 0 0 85%;
+  background: #212121;
+
+
+  color: #fafafa;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+  padding: 20px;
+  scroll-snap-align: center;
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+  animation: fadeInUp 0.8s ease forwards;
+}
+
+.modelo-card:hover {
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: 0 12px 32px rgba(0,0,0,0.35);
+}
+
+/* Animación */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(40px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Layout interno */
+.modelo-layout {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  align-items: flex-start;
+}
+
+.modelo-left {
+  flex: 2;
+}
+
+.modelo-nombre {
+  font-size: 2rem;
+  margin: 0;
+  color: #fafafa;
+}
+.modelo-apellido {
+  font-size: 2rem;
+  margin: 0;
+  color: #fafafa;
+}
+
+/* Imagen principal */
+.modelo-main img {
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+  margin: 15px 0;
+  object-fit: contain;
+  transition: transform 0.3s ease;
+}
+.modelo-main img:hover {
+  transform: scale(1.05);
+}
+
+/* Tarifas */
+.modelo-tarifas p {
+  margin: 4px 0;
+}
+
+/* Columna derecha */
+.modelo-right {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  justify-content: space-between;
+}
+.modelo-right img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  object-fit: contain;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.modelo-right img:hover {
+  transform: scale(1.08);
+  box-shadow: 0 4px 12px rgba(255,255,255,0.3);
+}
+
+/* Nota IVA */
+.ivaa {
+  font-size: 0.8rem;
+  color: #bbb;
+}
+
+/* Botones carrusel */
+.carousel-controls {
+	bottom: 20px;
+  text-align: center;
+  margin-top: 20px;
+}
+.btn-carousel {
+  background: #00c853;
+  border: none;
+  color: #fff;
+  font-size: 1rem;
+  padding: 10px 20px;
+  margin: 10px 10px 50px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+.btn-carousel:hover {
+  background: #048bbb;
+  transform: scale(1.1);
+}
+
+/* Ajustes para PC */
+@media (min-width: 1024px) {
+  .carousel-modelos {
+    justify-content: flex-start;
+    padding-left: calc((100% - 900px) / 2); /* centra la primera tarjeta */
+    padding-right: calc((100% - 900px) / 2);
+  }
+
+  .modelo-card {
+    flex: 0 0 auto;          /* evita que se estiren demasiado */
+    max-width: 900px;         /* ancho fijo en escritorio */
+    margin: 0 auto;
+  }
+
+  .modelo-main img {
+    max-width: 380px;
+    max-height: 500px;
+  }
+
+  .modelo-right img {
+    max-width: 120px;
+    max-height: 160px;
+  }
+}
+.invitacion-card {
+  flex: 0 0 85%;
+  background: #1e1e1e;
+  color: #fafafa;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+  padding: 30px;
+  text-align: center;
+  scroll-snap-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.invitacion-layout {
+  max-width: 600px;
+}
+
+.invitacion-titulo {
+  font-size: 1.8rem;
+  margin-bottom: 20px;
+  color: #fff;
+}
+
+.invitacion-card p {
+  font-size: 1rem;
+  margin-bottom: 25px;
+}
+
+.btn-wsp {
+  display: inline-block;
+  background: #25D366; /* verde WhatsApp */
+  color: #fff;
+  font-size: 1.1rem;
+  padding: 12px 24px;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.btn-wsp:hover {
+  background: #1ebe5d;
+  transform: scale(1.05);
+}
+
+/* Ajustes para PC */
+@media (min-width: 1024px) {
+  .invitacion-card {
+    flex: 0 0 auto;
+    width: 900px;
+    margin: 0 auto;
+  }
+}
+
+	  /*redes----------------------------------------------------*/
+h1.redesSociais {
+  display: none;
+}
+
+ul.redesSociais {
+  padding-left: 0;
+  width: 620px;
+  height: 100px;
+  position: relative;
+  left: 50%;
+  margin-top: 50px;
+  margin-left: -310px;
+  margin-bottom: 50px;
+  cursor: pointer;
+}
+
+ul.redesSociais li {
+  list-style-position: inside;
+  display: block;
+  position: absolute;
+  right: 50%;
+  transition: all 500ms;
+}
+
+/*Sem Mouse*/
+ul.redesSociais li.pinterest {
+
+  transform: scale(0.5);
+  margin-right: -10px;
+  z-index:0;
+}
+ul.redesSociais li.facebook {
+  transform: scale(0.5);
+  margin-right: -30px;
+  z-index:1;
+}
+ul.redesSociais li.twitter {
+  transform: scale(0.5);
+  margin-right: -50px;
+  z-index:2;
+}
+ul.redesSociais li.googleplus {
+  transform: scale(0.5);
+  margin-right: -70px;
+  z-index:1;
+}
+ul.redesSociais li.skype {
+  transform: scale(0.5);
+  margin-right: -90px;
+  z-index:0;
+}
+
+/*Com Mouse*/
+ul.redesSociais:hover li.pinterest {
+  margin-right: 100px;
+}
+ul.redesSociais:hover li.facebook {
+  margin-right: 20px;
+}
+ul.redesSociais:hover li.twitter {
+  margin-right: -60px;
+}
+ul.redesSociais:hover li.googleplus {
+  margin-right: -140px;
+}
+ul.redesSociais:hover li.skype {
+   margin-right: -220px;
+}
+
+
+	  /*footer----------------------------------------------------*/
+footer {
+  background: #212121;
+  color: #fafafa;
+  padding: 30px 20px;
+  text-align: center;
+  position: relative;
+  z-index: 10; /* asegura que esté por encima de otros elementos */
+}
+
+.footer-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+}
+
+/* Navegación */
+.footer-nav {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.footer-nav a {
+  color: #fafafa;
+  text-decoration: none;
+  font-size: 0.95rem;
+  transition: color 0.3s ease;
+}
+
+.footer-nav a:hover {
+  color: #00c853;
+}
+
+/* Términos */
+.footer-terms a {
+  color: #00c853;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.footer-terms a:hover {
+  text-decoration: underline;
+}
+
+/* Redes sociales */
+.footer-social {
+  display: flex;
+  gap: 15px;
+}
+
+.footer-social a {
+  font-size: 1.4rem;
+  text-decoration: none;
+  transition: transform 0.3s ease;
+}
+
+.footer-social a:hover {
+  transform: scale(1.2);
+}
+
+/* Copy */
+.footer-copy {
+  margin-top: 20px;
+  font-size: 0.85rem;
+  color: #aaa;
+}
+
+
+	</style>
+</head>
+<body>
+<div class="video-wrapper">
+  <video autoplay muted loop playsinline id="video-fondo">
+    <source src="fondo.webm" type="video/webm">
+    Tu navegador no soporta video HTML5.
+  </video>
+  <div class="overlay"></div>
+</div>
+		
+<!-- Botón hamburguesa (solo visible en móvil) -->
+<div class="hamburger" onclick="toggleMenu()">☰</div>
+
+<!-- Menú lateral -->
+<nav class="menu-lateral" id="menuLateral">
+    <div class="flecha" onclick="toggleMenu()">➤</div>
+    <a href="#inicio" data-title="Inicio">
+        <img src="home.png" data-gif="home.gif" alt="Inicio">
+        <span class="tooltip">Inicio</span>
+    </a>
+    <a href="#clientes" data-title="Clientes">
+        <img src="client.png" data-gif="client.gif" alt="Clientes">
+        <span class="tooltip">Clientes</span>
+    </a>
+    <a href="#overline-marketplace" data-title="Servicios">
+        <img src="servi.png" data-gif="servi.gif" alt="Servicios">
+        <span class="tooltip">Servicios</span>
+    </a>
+    <a href="#portafolio-modelos" data-title="Blog">
+        <img src="blog.png" data-gif="blog.gif" alt="Blog">
+        <span class="tooltip">Portafolio Modelos</span>
+    </a>
+    <a href="https://overline-terminos-y-condiciones.vercel.app/" data-title="Términos">
+        <img src="terminos.png" data-gif="terminos.gif" alt="Términos">
+        <span class="tooltip">Términos</span>
+    </a>
+</nav>
+
+
+
+
+<!-- Sección 1: Scroll video -->
+  <section id="inicio"> 
+    <canvas id="canvas1"></canvas>
+  </section>
+	
+	<section class="phone-section" id="clientes">
+  <div class="phone"> <img src="mockup-phone.webp" alt="Mockup celular" class="phone-overlay" > <div class="screen">
+      <!-- Header estilo Instagram -->
+      <div class="status-bar">
+  <span class="time">11:56</span>
+  <div class="status-icons">
+    <img src="icon-signal.webp" alt="Señal" class="status-icon">
+    <img src="icon-wifi.webp" alt="WiFi" class="status-icon">
+    <img src="icon-battery.webp" alt="Batería" class="status-icon">
+  </div>
+</div>
+
+      <div class="insta-header">
+        <div class="insta-icons">
+    <img src="icon-more.webp" alt="Comment" class="icon">
+        </div>
+        <img src="Insta.webp" alt="Instagram" class="insta-logo">
+        <div class="insta-icons">
+    <img src="icon-like.webp" alt="Comment" class="icon">
+        </div>
+      </div>
+<div class="stories-bar">
+  <!-- Primer story: agregar -->
+  <div class="story add-story">
+    <div class="story-avatar-wrapper">
+      <img src="overline-perfil.webp" alt="Tu perfil" class="story-avatar">
+      <span class="add-icon">+</span>
+    </div>
+    <span class="story-name">Tu historia</span>
+  </div>
+
+  <!-- Stories normales -->
+  <div class="story">
+    <img src="odc-perfil.webp" alt="Usuario 2" class="story-avatar">
+    <span class="story-name">Odc.arq</span>
+  </div>
+  <div class="story">
+    <img src="gus-perfil.webp" alt="Usuario 3" class="story-avatar">
+    <span class="story-name">dr.gustavolara</span>
+  </div>
+  <div class="story">
+    <img src="necio-perfil.webp" alt="Usuario 2" class="story-avatar">
+    <span class="story-name">Necio</span>
+  </div>
+  <div class="story">
+    <img src="sieramont-perfil.webp" alt="Usuario 3" class="story-avatar">
+    <span class="story-name">sieramont</span>
+  </div>
+</div>
+
+      <!-- Feed tipo Instagram -->
+      <div class="carousel">
+        <div class="card">
+  <!-- Header del usuario -->
+  <div class="card-header">
+  <div class="card-header-left">
+    <img src="odc-perfil.webp" alt="Usuario" class="avatar">
+    <span class="username">ODC.ARQ</span>
+  </div>
+</div>
+
+
+  <!-- Imagen principal -->
+  <img src="odc2.webp" alt="Imagen 1" class="post-img" onclick="openPopup('popup1')">
+
+  <!-- Barra de acciones -->
+  <div class="card-actions">
+    <img src="icon-like.webp" alt="Like" class="icon">
+    <img src="icon-comment.webp" alt="Comment" class="icon">
+    <img src="icon-repost.webp" alt="Repost" class="icon">
+    <img src="icon-share.webp" alt="share" class="icon">
+    <img src="icon-save.webp" alt="Save" class="icon">
+  </div>
+
+  <!-- Likes -->
+  <div class="card-likes">
+    Les gusta a <b>Onerain.art</b> y <b>120 más</b>
+  </div>
+
+  <!-- Descripción -->
+  <div class="card-description">
+    <b>ODC.ARQ</b> Con odc oficina de diseño y conxtruccion impulsamos su transformación digital, desde la creacion de su pagina web hasta una estrategia de redes con contenido y reels que transmiten confianza y cercanía, logrando que su marca conecte con su comunidad de manera auténtica y memorable.
+  </div>
+
+  <!-- Comentarios -->
+  <div class="card-comments">
+    Ver los 15 comentarios
+  </div>
+
+  <!-- Fecha -->
+  <div class="card-date">
+    Hace 2 horas
+  </div>
+</div>
+        <div class="card">
+  <!-- Header del usuario -->
+  <div class="card-header">
+  <div class="card-header-left">
+    <img src="gus-perfil.webp" alt="Usuario" class="avatar">
+    <span class="username">dr.gustavolara</span>
+  </div>
+</div>
+  <!-- Imagen principal -->
+  <img src="gus1.webp" alt="Imagen 2" class="post-img" onclick="openPopup('popup2')">
+
+  <!-- Barra de acciones -->
+  <div class="card-actions">
+    <img src="icon-like.webp" alt="Like" class="icon">
+    <img src="icon-comment.webp" alt="Comment" class="icon">
+    <img src="icon-repost.webp" alt="Repost" class="icon">
+    <img src="icon-share.webp" alt="share" class="icon">
+    <img src="icon-save.webp" alt="Save" class="icon">
+  </div>
+
+  <!-- Likes -->
+  <div class="card-likes">
+    Les gusta a <b>marioxasas</b> y <b>190 más</b>
+  </div>
+
+  <!-- Descripción -->
+  <div class="card-description">
+    <b>dr.gustavolara</b> Con Gustavo Lara demostramos cómo una marca puede evolucionar desde su identidad visual hasta una narrativa digital que inspira y conecta.
+  </div>
+
+  <!-- Comentarios -->
+  <div class="card-comments">
+    Ver los 15 comentarios
+  </div>
+
+  <!-- Fecha -->
+  <div class="card-date">
+    Hace 2 horas
+  </div>
+</div>
+        <div class="card">
+  <!-- Header del usuario -->
+  <div class="card-header">
+  <div class="card-header-left">
+    <img src="necio-perfil.webp" alt="Usuario" class="avatar">
+    <span class="username">necio</span>
+  </div>
+</div>
+
+  <!-- Imagen principal -->
+  <img src="necio3.webp" alt="Imagen 3" class="post-img" onclick="openPopup('popup3')">
+
+  <!-- Barra de acciones -->
+  <div class="card-actions">
+    <img src="icon-like.webp" alt="Like" class="icon">
+    <img src="icon-comment.webp" alt="Comment" class="icon">
+    <img src="icon-repost.webp" alt="Repost" class="icon">
+    <img src="icon-share.webp" alt="share" class="icon">
+    <img src="icon-save.webp" alt="Save" class="icon">
+  </div>
+
+  <!-- Likes -->
+  <div class="card-likes">
+    Les gusta a <b>moebars</b> y <b>200 más</b>
+  </div>
+
+  <!-- Descripción -->
+  <div class="card-description">
+    <b>Necio</b> Para El Bar Necio desarrollamos contenido de redes sociales, posts y reels, además de gestionar su presencia digital con un manejo integral de sus plataformas.
+  </div>
+
+  <!-- Comentarios -->
+  <div class="card-comments">
+    Ver los 15 comentarios
+  </div>
+
+  <!-- Fecha -->
+  <div class="card-date">
+    Hace 2 horas
+  </div>
+</div>
+        <div class="card">
+  <!-- Header del usuario -->
+  <div class="card-header">
+  <div class="card-header-left">
+    <img src="sieramont-perfil.webp" alt="Usuario" class="avatar">
+    <span class="username">sieramont</span>
+  </div>
+</div>
+
+
+  <!-- Imagen principal -->
+  <img src="sm1.webp" alt="Imagen 1" class="post-img" onclick="openPopup('popup4')">
+
+  <!-- Barra de acciones -->
+  <div class="card-actions">
+    <img src="icon-like.webp" alt="Like" class="icon">
+    <img src="icon-comment.webp" alt="Comment" class="icon">
+    <img src="icon-repost.webp" alt="Repost" class="icon">
+    <img src="icon-share.webp" alt="share" class="icon">
+    <img src="icon-save.webp" alt="Save" class="icon">
+  </div>
+
+  <!-- Likes -->
+  <div class="card-likes">
+    Les gusta a <b>JuanGomez06</b> y <b>125 más</b>
+  </div>
+
+  <!-- Descripción -->
+  <div class="card-description">
+    <b>Sieramont</b> Para Sieramont Condominio Campestre en Valledupar desarrollamos su página web, gestionamos contenido para redes sociales y producimos reels que fortalecen su presencia digital.
+  </div>
+
+  <!-- Comentarios -->
+  <div class="card-comments">
+    Ver los 15 comentarios
+  </div>
+
+  <!-- Fecha -->
+  <div class="card-date">
+    Hace 2 horas
+  </div>
+</div>
+        <div class="card">
+  <!-- Header del usuario -->
+  <div class="card-header">
+  <div class="card-header-left">
+    <img src="Rebel-perfil.webp" alt="Usuario" class="avatar">
+    <span class="username">RebelBoys_</span>
+  </div>
+</div>
+  <!-- Imagen principal -->
+  <img src="Rebel1.webp" alt="Imagen 2" class="post-img" onclick="openPopup('popup5')">
+
+  <!-- Barra de acciones -->
+  <div class="card-actions">
+    <img src="icon-like.webp" alt="Like" class="icon">
+    <img src="icon-comment.webp" alt="Comment" class="icon">
+    <img src="icon-repost.webp" alt="Repost" class="icon">
+    <img src="icon-share.webp" alt="share" class="icon">
+    <img src="icon-save.webp" alt="Save" class="icon">
+  </div>
+
+  <!-- Likes -->
+  <div class="card-likes">
+    Les gusta a <b>dario26</b> y <b>350 más</b>
+  </div>
+
+  <!-- Descripción -->
+  <div class="card-description">
+    <b>Rebel Boys</b> Para Rebel Boys, marca de camisetas oversize, realizamos un reel que refuerza su presencia en redes sociales y proyecta su estilo urbano con autenticidad.
+  </div>
+
+  <!-- Comentarios -->
+  <div class="card-comments">
+    Ver los 15 comentarios
+  </div>
+
+  <!-- Fecha -->
+  <div class="card-date">
+    Hace 2 horas
+  </div>
+</div>
+        <div class="card">
+  <!-- Header del usuario -->
+  <div class="card-header">
+  <div class="card-header-left">
+    <img src="lyg-perfil.webp" alt="Usuario" class="avatar">
+    <span class="username">Industrias_l&G</span>
+  </div>
+</div>
+
+  <!-- Imagen principal -->
+  <img src="lyg1.webp" alt="Imagen 3" class="post-img" onclick="openPopup('popup6')">
+
+  <!-- Barra de acciones -->
+  <div class="card-actions">
+    <img src="icon-like.webp" alt="Like" class="icon">
+    <img src="icon-comment.webp" alt="Comment" class="icon">
+    <img src="icon-repost.webp" alt="Repost" class="icon">
+    <img src="icon-share.webp" alt="share" class="icon">
+    <img src="icon-save.webp" alt="Save" class="icon">
+  </div>
+
+  <!-- Likes -->
+  <div class="card-likes">
+    Les gusta a <b>mariocabrera55</b> y <b>110 más</b>
+  </div>
+
+  <!-- Descripción -->
+  <div class="card-description">
+    <b>Industrias l&G</b> Para LYG Industrias, especialistas en carrocerías para camiones, desarrollamos contenido de redes sociales, posts y reels, además de gestionar su presencia digital con un manejo estratégico.
+  </div>
+
+  <!-- Comentarios -->
+  <div class="card-comments">
+    Ver los 15 comentarios
+  </div>
+
+  <!-- Fecha -->
+  <div class="card-date">
+    Hace 2 horas
+  </div>
+</div>
+        <div class="card">
+  <!-- Header del usuario -->
+  <div class="card-header">
+  <div class="card-header-left">
+    <img src="overline-perfil.webp" alt="Usuario" class="avatar">
+    <span class="username">OVERLINE</span>
+  </div>
+</div>
+
+
+  <!-- Imagen principal -->
+  <img src="over1.webp" alt="Imagen 1" class="post-img" onclick="openPopup('popup7')">
+
+  <!-- Barra de acciones -->
+  <div class="card-actions">
+    <img src="icon-like.webp" alt="Like" class="icon">
+    <img src="icon-comment.webp" alt="Comment" class="icon">
+    <img src="icon-repost.webp" alt="Repost" class="icon">
+    <img src="icon-share.webp" alt="share" class="icon">
+    <img src="icon-save.webp" alt="Save" class="icon">
+  </div>
+
+  <!-- Likes -->
+  <div class="card-likes">
+    Les gusta a <b>Onerain.art</b> y <b>120 más</b>
+  </div>
+
+  <!-- Descripción -->
+  <div class="card-description">
+    <b>OverLine</b> En Overline Agencia Gráfica desarrollamos todo desde cero: construimos la identidad de marca, definimos el concepto creativo y diseñamos la experiencia digital que hoy nos representa.
+  </div>
+
+  <!-- Comentarios -->
+  <div class="card-comments">
+    Ver los 15 comentarios
+  </div>
+
+  <!-- Fecha -->
+  <div class="card-date">
+    Hace 2 horas
+  </div>
+</div>
+        <div class="card">
+  <!-- Header del usuario -->
+  <div class="card-header">
+  <div class="card-header-left">
+    <img src="jb-perfil.webp" alt="Usuario" class="avatar">
+    <span class="username">jBurguers</span>
+  </div>
+</div>
+  <!-- Imagen principal -->
+  <img src="jb1.webp" alt="Imagen 2" class="post-img" onclick="openPopup('popup8')">
+
+  <!-- Barra de acciones -->
+  <div class="card-actions">
+    <img src="icon-like.webp" alt="Like" class="icon">
+    <img src="icon-comment.webp" alt="Comment" class="icon">
+    <img src="icon-repost.webp" alt="Repost" class="icon">
+    <img src="icon-share.webp" alt="share" class="icon">
+    <img src="icon-save.webp" alt="Save" class="icon">
+  </div>
+
+  <!-- Likes -->
+  <div class="card-likes">
+    Les gusta a <b>Julianb</b> y <b>190 más</b>
+  </div>
+
+  <!-- Descripción -->
+  <div class="card-description">
+    <b>jBurguers</b> Para JBurguers, restaurante especializado en hamburguesas, diseñamos piezas gráficas que reforzaron su identidad visual y aportaron creatividad a su comunicación en redes.
+  </div>
+
+  <!-- Comentarios -->
+  <div class="card-comments">
+    Ver los 15 comentarios
+  </div>
+
+  <!-- Fecha -->
+  <div class="card-date">
+    Hace 2 horas
+  </div>
+</div>
+        <div class="card">
+  <!-- Header del usuario -->
+  <div class="card-header">
+  <div class="card-header-left">
+    <img src="B&E-perfil.webp" alt="Usuario" class="avatar">
+    <span class="username">B&E</span>
+  </div>
+</div>
+
+  <!-- Imagen principal -->
+  <img src="B&E1.webp" alt="Imagen 3" class="post-img" onclick="openPopup('popup9')">
+
+  <!-- Barra de acciones -->
+  <div class="card-actions">
+    <img src="icon-like.webp" alt="Like" class="icon">
+    <img src="icon-comment.webp" alt="Comment" class="icon">
+    <img src="icon-repost.webp" alt="Repost" class="icon">
+    <img src="icon-share.webp" alt="share" class="icon">
+    <img src="icon-save.webp" alt="Save" class="icon">
+  </div>
+
+  <!-- Likes -->
+  <div class="card-likes">
+    Les gusta a <b>carlos gomez</b> y <b>200 más</b>
+  </div>
+
+  <!-- Descripción -->
+  <div class="card-description">
+    <b>B&E (Bandas y Estructuras)</b> Para B&E, Bandas y Estructuras, diseñamos su logo, brochure y tarjetas, creando una identidad visual sólida y profesional que refuerza su presencia en el mercado.
+  </div>
+
+  <!-- Comentarios -->
+  <div class="card-comments">
+    Ver los 15 comentarios
+  </div>
+
+  <!-- Fecha -->
+  <div class="card-date">
+    Hace 2 horas
+  </div>
+</div>
+
+      </div>
+
+      <!-- Footer estilo Instagram -->
+      <div class="insta-footer">
+    <img src="icon-home.webp" alt="home" class="icon">
+    <img src="icon-reel.webp" alt="reel" class="icon">
+    <img src="icon-share.webp" alt="share" class="icon">
+    <img src="icon-search.webp" alt="search" class="icon">
+    <img src="icon-user.webp" alt="user" class="icon">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Popups -->
+<!-- POPUP PERFIL INSTAGRAM -->
+	
+	<div id="popup1" class="popup-ig popup-odc">
+  <div class="popup-ig-content">
+    <!-- Mockup overlay -->
+    <img src="mockup-phone.webp" alt="Mockup celular" class="popup-ig-overlay">
+
+    <!-- Pantalla interna -->
+    <div class="popup-ig-screen">
+      
+      <!-- Status bar -->
+      <div class="popup-ig-statusbar">
+        <span class="popup-ig-time">11:56</span>
+        <div class="popup-ig-statusicons">
+          <img src="icon-signal.webp" alt="Señal" class="popup-ig-statusicon">
+          <img src="icon-wifi.webp" alt="WiFi" class="popup-ig-statusicon">
+          <img src="icon-battery.webp" alt="Batería" class="popup-ig-statusicon">
+        </div>
+      </div>
+
+      <!-- Header del perfil -->
+      <div class="popup-ig-profileheader">
+        <img src="odc-perfil.webp" alt="Perfil" class="popup-ig-avatar">
+        <div class="popup-ig-profileinfo">
+          <span class="popup-ig-profilename">ODC - Oficina de Diseño y Construcción</span>
+          <span class="popup-ig-profilenote">Nota: Digital Integral</span>
+        </div>
+        <img src="icon-options.webp" alt="Opciones" class="popup-ig-iconoptions">
+      </div>
+
+      <!-- Servicios ofrecidos -->
+      <div class="popup-ig-profilestats">
+        <div class="popup-ig-stat">
+          <span class="popup-ig-statnumber">Web</span>
+          <span class="popup-ig-statlabel">Presencia</span>
+        </div>
+        <div class="popup-ig-stat">
+          <span class="popup-ig-statnumber">Contenido</span>
+          <span class="popup-ig-statlabel">Comunicación</span>
+        </div>
+        <div class="popup-ig-stat">
+          <span class="popup-ig-statnumber">Reels</span>
+          <span class="popup-ig-statlabel">Dinamismo</span>
+        </div>
+      </div>
+
+      <!-- Descripción -->
+      <div class="popup-ig-profiledesc">
+        <p>Desarrollamos una estrategia digital completa que incluyo la creación de su página web, el diseño y gestión de contenido para redes sociales, además de la producción de reels dinámicos que fortalecieron su presencia online y comunicación con su audiencia</p>
+      </div>
+
+      <!-- Tabs -->
+      <div class="popup-ig-tabs">
+        <span class="popup-ig-tab active">Posts</span>
+        <span class="popup-ig-tab">Reels</span>
+      </div>
+
+      <!-- Feed vertical -->
+      <div class="popup-ig-feed">
+        <div class="popup-ig-feeditem"><img src="odc2.webp" alt="Post 1"></div>
+        <div class="popup-ig-feeditem"><img src="odc3.webp" alt="Post 2"></div>
+        <div class="popup-ig-feeditem"><img src="odc1.webp" alt="Post 3"></div>
+        <div class="popup-ig-feeditem"><img src="odc4.webp" alt="Post 4"></div>
+        <div class="popup-ig-feeditem"><img src="odc5.webp" alt="Post 5"></div>
+        <div class="popup-ig-feeditem"><img src="odc6.webp" alt="Post 6"></div>
+        <div class="popup-ig-feeditem"><img src="odc7.webp" alt="Post 7"></div>
+        <div class="popup-ig-feeditem"><img src="odc8.webp" alt="Post 8"></div>
+        <div class="popup-ig-feeditem"><img src="odc9.webp" alt="Post 9"></div>
+        <div class="popup-ig-feeditem"><img src="odc10.webp" alt="Post 10"></div>
+		<div class="popup-ig-feeditem"> <video src="odc01.webm" controls playsinline muted loop></video> </div>
+		<div class="popup-ig-feeditem"> <video src="odc02.webm" controls playsinline muted loop></video> </div>
+		<div class="popup-ig-feeditem"> <video src="odc03.webm" controls playsinline muted loop></video> </div>
+		<div class="popup-ig-feeditem"> <video src="odc04.webm" controls playsinline muted loop></video> </div>
+      </div>
+
+      <!-- Footer fijo -->
+      <div class="popup-ig-footer">
+    <img src="icon-home.webp" alt="home" class="icon">
+    <img src="icon-reel.webp" alt="reel" class="icon">
+    <img src="icon-share.webp" alt="share" class="icon">
+    <img src="icon-search.webp" alt="search" class="icon">
+    <img src="icon-user.webp" alt="user" class="icon">
+      </div>
+
+    </div>
+  </div>
+</div>
+	
+	<div id="popup2" class="popup-ig popup-gus">
+  <div class="popup-ig-content">
+    <!-- Mockup overlay -->
+    <img src="mockup-phone.webp" alt="Mockup celular" class="popup-ig-overlay">
+
+    <!-- Pantalla interna -->
+    <div class="popup-ig-screen">
+      
+      <!-- Status bar -->
+      <div class="popup-ig-statusbar">
+        <span class="popup-ig-time">11:56</span>
+        <div class="popup-ig-statusicons">
+          <img src="icon-signal.webp" alt="Señal" class="popup-ig-statusicon">
+          <img src="icon-wifi.webp" alt="WiFi" class="popup-ig-statusicon">
+          <img src="icon-battery.webp" alt="Batería" class="popup-ig-statusicon">
+        </div>
+      </div>
+
+      <!-- Header del perfil -->
+      <div class="popup-ig-profileheader">
+        <img src="gus-perfil.webp" alt="Perfil" class="popup-ig-avatar">
+        <div class="popup-ig-profileinfo">
+          <span class="popup-ig-profilename">dr.gustavolara</span>
+          <span class="popup-ig-profilenote">Nota: Branding & Social Media</span>
+        </div>
+        <img src="icon-options.webp" alt="Opciones" class="popup-ig-iconoptions">
+      </div>
+
+      <!-- Servicios ofrecidos -->
+      <div class="popup-ig-profilestats">
+        <div class="popup-ig-stat">
+          <span class="popup-ig-statnumber">Logo</span>
+          <span class="popup-ig-statlabel">Identidad</span>
+        </div>
+        <div class="popup-ig-stat">
+          <span class="popup-ig-statnumber">Redes</span>
+          <span class="popup-ig-statlabel">Estrategia</span>
+        </div>
+        <div class="popup-ig-stat">
+          <span class="popup-ig-statnumber">Reels</span>
+          <span class="popup-ig-statlabel">Creatividad</span>
+        </div>
+      </div>
+
+      <!-- Descripción -->
+      <div class="popup-ig-profiledesc">
+        <p>Con Gustavo Lara demostramos cómo una marca puede evolucionar desde su identidad visual hasta una narrativa digital que inspira y conecta.</p>
+      </div>
+
+      <!-- Tabs -->
+      <div class="popup-ig-tabs">
+        <span class="popup-ig-tab active">Posts</span>
+        <span class="popup-ig-tab">Reels</span>
+      </div>
+
+      <!-- Feed vertical -->
+      <div class="popup-ig-feed">
+        <div class="popup-ig-feeditem"><img src="gus1.webp" alt="Post 1"></div>
+        <div class="popup-ig-feeditem"><img src="gus2.webp" alt="Post 2"></div>
+        <div class="popup-ig-feeditem"><img src="gus3.webp" alt="Post 3"></div>
+        <div class="popup-ig-feeditem"><img src="gus4.webp" alt="Post 4"></div>
+        <div class="popup-ig-feeditem"><img src="gus5.webp" alt="Post 5"></div>
+		<div class="popup-ig-feeditem"> <video src="GUS01.webm" controls playsinline muted loop></video> </div>
+		<div class="popup-ig-feeditem"> <video src="GUS02.webm" controls playsinline muted loop></video> </div>
+		<div class="popup-ig-feeditem"> <video src="GUS03.webm" controls playsinline muted loop></video> </div>
+		<div class="popup-ig-feeditem"> <video src="GUS04.webm" controls playsinline muted loop></video> </div>
+		<div class="popup-ig-feeditem"> <video src="GUS05.webm" controls playsinline muted loop></video> </div>
+		<div class="popup-ig-feeditem"> <video src="GUS06.webm" controls playsinline muted loop></video> </div>
+      </div>
+
+      <!-- Footer fijo -->
+      <div class="popup-ig-footer">
+    <img src="icon-home.webp" alt="home" class="icon">
+    <img src="icon-reel.webp" alt="reel" class="icon">
+    <img src="icon-share.webp" alt="share" class="icon">
+    <img src="icon-search.webp" alt="search" class="icon">
+    <img src="icon-user.webp" alt="user" class="icon">
+      </div>
+
+    </div>
+  </div>
+</div>
+	
+	<div id="popup3" class="popup-ig popup-necio">
+  <div class="popup-ig-content">
+    <!-- Mockup overlay -->
+    <img src="mockup-phone.webp" alt="Mockup celular" class="popup-ig-overlay">
+
+    <!-- Pantalla interna -->
+    <div class="popup-ig-screen">
+      
+      <!-- Status bar -->
+      <div class="popup-ig-statusbar">
+        <span class="popup-ig-time">11:56</span>
+        <div class="popup-ig-statusicons">
+          <img src="icon-signal.webp" alt="Señal" class="popup-ig-statusicon">
+          <img src="icon-wifi.webp" alt="WiFi" class="popup-ig-statusicon">
+          <img src="icon-battery.webp" alt="Batería" class="popup-ig-statusicon">
+        </div>
+      </div>
+
+      <!-- Header del perfil -->
+      <div class="popup-ig-profileheader">
+        <img src="necio-perfil.webp" alt="Perfil" class="popup-ig-avatar">
+        <div class="popup-ig-profileinfo">
+          <span class="popup-ig-profilename">Necio</span>
+          <span class="popup-ig-profilenote">Nota: Branding & Social Media</span>
+        </div>
+        <img src="icon-options.webp" alt="Opciones" class="popup-ig-iconoptions">
+      </div>
+
+      <!-- Servicios ofrecidos -->
+      <div class="popup-ig-profilestats">
+        <div class="popup-ig-stat">
+          <span class="popup-ig-statnumber">Logo</span>
+          <span class="popup-ig-statlabel">Estilo</span>
+        </div>
+        <div class="popup-ig-stat">
+          <span class="popup-ig-statnumber">Comunidad</span>
+          <span class="popup-ig-statlabel">Conexión</span>
+        </div>
+        <div class="popup-ig-stat">
+          <span class="popup-ig-statnumber">Contenido</span>
+          <span class="popup-ig-statlabel">Autenticidad</span>
+        </div>
+      </div>
+
+      <!-- Descripción -->
+      <div class="popup-ig-profiledesc">
+        <p>Con El Bar Necio potenciamos su identidad digital a través de contenido creativo, posts y reels que transmiten su esencia única. Gracias al manejo integral de sus redes sociales logramos que su marca conecte con su comunidad de manera auténtica y atractiva.</p>
+      </div>
+
+      <!-- Tabs -->
+      <div class="popup-ig-tabs">
+        <span class="popup-ig-tab active">Posts</span>
+        <span class="popup-ig-tab">Reels</span>
+      </div>
+
+      <!-- Feed vertical -->
+      <div class="popup-ig-feed">
+        <div class="popup-ig-feeditem"><img src="necio1.webp" alt="Post 1"></div>
+        <div class="popup-ig-feeditem"><img src="necio2.webp" alt="Post 2"></div>
+        <div class="popup-ig-feeditem"><img src="necio3.webp" alt="Post 3"></div>
+        <div class="popup-ig-feeditem"><img src="necio4.webp" alt="Post 4"></div>
+        <div class="popup-ig-feeditem"><img src="necio5.webp" alt="Post 5"></div>
+        <div class="popup-ig-feeditem"><img src="necio6.webp" alt="Post 6"></div>
+        <div class="popup-ig-feeditem"><img src="necio7.webp" alt="Post 7"></div>
+        <div class="popup-ig-feeditem"><img src="necio8.webp" alt="Post 8"></div>
+        <div class="popup-ig-feeditem"><img src="necio9.webp" alt="Post 9"></div>
+        <div class="popup-ig-feeditem"><img src="necio10.webp" alt="Post 10"></div>
+        <div class="popup-ig-feeditem"><img src="necio11.webp" alt="Post 11"></div>
+		<div class="popup-ig-feeditem"> <video src="NECIO1.webm" controls playsinline muted loop></video> </div>
+		<div class="popup-ig-feeditem"> <video src="NECIO2.webm" controls playsinline muted loop></video> </div>
+		<div class="popup-ig-feeditem"> <video src="NECIO3.webm" controls playsinline muted loop></video> </div>
+      </div>
+
+      <!-- Footer fijo -->
+      <div class="popup-ig-footer">
+    <img src="icon-home.webp" alt="home" class="icon">
+    <img src="icon-reel.webp" alt="reel" class="icon">
+    <img src="icon-share.webp" alt="share" class="icon">
+    <img src="icon-search.webp" alt="search" class="icon">
+    <img src="icon-user.webp" alt="user" class="icon">
+      </div>
+
+    </div>
+  </div>
+</div>
+	
+	<div id="popup4" class="popup-ig popup-sm">
+  <div class="popup-ig-content">
+    <!-- Mockup overlay -->
+    <img src="mockup-phone.webp" alt="Mockup celular" class="popup-ig-overlay">
+
+    <!-- Pantalla interna -->
+    <div class="popup-ig-screen">
+      
+      <!-- Status bar -->
+      <div class="popup-ig-statusbar">
+        <span class="popup-ig-time">11:56</span>
+        <div class="popup-ig-statusicons">
+          <img src="icon-signal.webp" alt="Señal" class="popup-ig-statusicon">
+
+          <img src="icon-wifi.webp" alt="WiFi" class="popup-ig-statusicon">
+          <img src="icon-battery.webp" alt="Batería" class="popup-ig-statusicon">
+        </div>
+      </div>
+
+      <!-- Header del perfil -->
+      <div class="popup-ig-profileheader">
+        <img src="sieramont-perfil.webp" alt="Perfil" class="popup-ig-avatar">
+        <div class="popup-ig-profileinfo">
+          <span class="popup-ig-profilename">Sieramont Condominio Campestre</span>
+          <span class="popup-ig-profilenote">Nota: Web & Social Media</span>
+        </div>
+        <img src="icon-options.webp" alt="Opciones" class="popup-ig-iconoptions">
+      </div>
+
+      <!-- Servicios ofrecidos -->
+      <div class="popup-ig-profilestats">
+        <div class="popup-ig-stat">
+          <span class="popup-ig-statnumber">Página</span>
+          <span class="popup-ig-statlabel">Confianza</span>
+        </div>
+        <div class="popup-ig-stat">
+          <span class="popup-ig-statnumber">Campaña</span>
+          <span class="popup-ig-statlabel">Atracción</span>
+        </div>
+        <div class="popup-ig-stat">
+          <span class="popup-ig-statnumber">Reels</span>
+          <span class="popup-ig-statlabel">Naturaleza</span>
+        </div>
+      </div>
+
+      <!-- Descripción -->
+      <div class="popup-ig-profiledesc">
+        <p>Para Sieramont Condominio Campestre en Valledupar desarrollamos su página web, gestionamos contenido para redes sociales y producimos reels que fortalecen su presencia digital.</p>
+
+      <!-- Tabs -->
+      <div class="popup-ig-tabs">
+        <span class="popup-ig-tab active">Posts</span>
+        <span class="popup-ig-tab">Reels</span>
+      </div>
+
+      <!-- Feed vertical -->
+      <div class="popup-ig-feed">
+        <div class="popup-ig-feeditem"><img src="sm1.webp" alt="Post 1"></div>
+        <div class="popup-ig-feeditem"><img src="sm2.webp" alt="Post 2"></div>
+        <div class="popup-ig-feeditem"><img src="sm3.webp" alt="Post 3"></div>
+        <div class="popup-ig-feeditem"><img src="sm4.webp" alt="Post 4"></div>
+        <div class="popup-ig-feeditem"><img src="sm5.webp" alt="Post 5"></div>
+        <div class="popup-ig-feeditem"><img src="sm6.webp" alt="Post 6"></div>
+        <div class="popup-ig-feeditem"><img src="sm7.webp" alt="Post 7"></div>
+        <div class="popup-ig-feeditem"><img src="sm8.webp" alt="Post 8"></div>
+        <div class="popup-ig-feeditem"><img src="sm9.webp" alt="Post 9"></div>
+		<div class="popup-ig-feeditem"> <video src="siera01.webm" controls playsinline muted loop></video> </div>
+		<div class="popup-ig-feeditem"> <video src="siera02.webm" controls playsinline muted loop></video> </div>
+		<div class="popup-ig-feeditem"> <video src="siera03.webm" controls playsinline muted loop></video> </div>
+      </div>
+
+      <!-- Footer fijo -->
+      <div class="popup-ig-footer">
+    <img src="icon-home.webp" alt="home" class="icon">
+    <img src="icon-reel.webp" alt="reel" class="icon">
+    <img src="icon-share.webp" alt="share" class="icon">
+    <img src="icon-search.webp" alt="search" class="icon">
+    <img src="icon-user.webp" alt="user" class="icon">
+      </div>
+
+    </div>
+  </div>
+</div>
+</div>
+	
+	<div id="popup5" class="popup-ig popup-rebel">
+  <div class="popup-ig-content">
+    <!-- Mockup overlay -->
+    <img src="mockup-phone.webp" alt="Mockup celular" class="popup-ig-overlay">
+
+    <!-- Pantalla interna -->
+    <div class="popup-ig-screen">
+      
+      <!-- Status bar -->
+      <div class="popup-ig-statusbar">
+        <span class="popup-ig-time">11:56</span>
+        <div class="popup-ig-statusicons">
+          <img src="icon-signal.webp" alt="Señal" class="popup-ig-statusicon">
+          <img src="icon-wifi.webp" alt="WiFi" class="popup-ig-statusicon">
+          <img src="icon-battery.webp" alt="Batería" class="popup-ig-statusicon">
+        </div>
+      </div>
+
+      <!-- Header del perfil -->
+      <div class="popup-ig-profileheader">
+        <img src="gus-perfil.webp" alt="Perfil" class="popup-ig-avatar">
+        <div class="popup-ig-profileinfo">
+          <span class="popup-ig-profilename">Rebel Boys</span>
+          <span class="popup-ig-profilenote">Nota: Branding & Social Media</span>
+        </div>
+        <img src="icon-options.webp" alt="Opciones" class="popup-ig-iconoptions">
+      </div>
+
+      <!-- Servicios ofrecidos -->
+      <div class="popup-ig-profilestats">
+        <div class="popup-ig-stat">
+          <span class="popup-ig-statnumber">Logo</span>
+          <span class="popup-ig-statlabel">Identidad</span>
+        </div>
+        <div class="popup-ig-stat">
+          <span class="popup-ig-statnumber">Redes</span>
+          <span class="popup-ig-statlabel">Estrategia</span>
+        </div>
+        <div class="popup-ig-stat">
+          <span class="popup-ig-statnumber">Reels</span>
+          <span class="popup-ig-statlabel">Creatividad</span>
+        </div>
+      </div>
+
+      <!-- Descripción -->
+      <div class="popup-ig-profiledesc">
+        <p>Con Gustavo Lara demostramos cómo una marca puede evolucionar desde su identidad visual hasta una narrativa digital que inspira y conecta.</p>
+      </div>
+
+      <!-- Tabs -->
+      <div class="popup-ig-tabs">
+        <span class="popup-ig-tab active">Posts</span>
+        <span class="popup-ig-tab">Reels</span>
+      </div>
+
+      <!-- Feed vertical -->
+      <div class="popup-ig-feed">
+		<div class="popup-ig-feeditem"> <video src="rebel.webm" controls playsinline muted loop></video> </div>
+      </div>
+
+      <!-- Footer fijo -->
+      <div class="popup-ig-footer">
+    <img src="icon-home.webp" alt="home" class="icon">
+    <img src="icon-reel.webp" alt="reel" class="icon">
+    <img src="icon-share.webp" alt="share" class="icon">
+    <img src="icon-search.webp" alt="search" class="icon">
+    <img src="icon-user.webp" alt="user" class="icon">
+      </div>
+
+    </div>
+  </div>
+</div>
+	
+	<div id="popup6" class="popup-ig popup-lyg">
+  <div class="popup-ig-content">
+    <!-- Mockup overlay -->
+    <img src="mockup-phone.webp" alt="Mockup celular" class="popup-ig-overlay">
+
+    <!-- Pantalla interna -->
+    <div class="popup-ig-screen">
+      
+      <!-- Status bar -->
+      <div class="popup-ig-statusbar">
+        <span class="popup-ig-time">11:56</span>
+        <div class="popup-ig-statusicons">
+          <img src="icon-signal.webp" alt="Señal" class="popup-ig-statusicon">
+          <img src="icon-wifi.webp" alt="WiFi" class="popup-ig-statusicon">
+          <img src="icon-battery.webp" alt="Batería" class="popup-ig-statusicon">
+        </div>
+      </div>
+
+      <!-- Header del perfil -->
+      <div class="popup-ig-profileheader">
+        <img src="lyg-perfil.webp" alt="Perfil" class="popup-ig-avatar">
+        <div class="popup-ig-profileinfo">
+          <span class="popup-ig-profilename">LYG Industrias</span>
+          <span class="popup-ig-profilenote">Nota: Social Media</span>
+        </div>
+        <img src="icon-options.webp" alt="Opciones" class="popup-ig-iconoptions">
+      </div>
+
+      <!-- Servicios ofrecidos -->
+      <div class="popup-ig-profilestats">
+        <div class="popup-ig-stat">
+          <span class="popup-ig-statnumber">Marca</span>
+          <span class="popup-ig-statlabel">Solidez</span>
+        </div>
+        <div class="popup-ig-stat">
+          <span class="popup-ig-statnumber">Posts</span>
+          <span class="popup-ig-statlabel">Innovación</span>
+        </div>
+        <div class="popup-ig-stat">
+          <span class="popup-ig-statnumber">Reels</span>
+          <span class="popup-ig-statlabel">Impacto</span>
+        </div>
+      </div>
+
+      <!-- Descripción -->
+      <div class="popup-ig-profiledesc">
+        <p>Con LYG Industrias potenciamos su identidad en el mundo digital, creando contenido visual y dinámico —posts y reels— que transmiten la fuerza y confiabilidad de sus carrocerías. A través del manejo integral de sus redes sociales logramos que su marca conecte con clientes y proyecte innovación en el sector.</p>
+      </div>
+
+      <!-- Tabs -->
+      <div class="popup-ig-tabs">
+        <span class="popup-ig-tab active">Posts</span>
+        <span class="popup-ig-tab">Reels</span>
+      </div>
+
+      <!-- Feed vertical -->
+      <div class="popup-ig-feed">
+        <div class="popup-ig-feeditem"><img src="lyg1.webp" alt="Post 1"></div>
+        <div class="popup-ig-feeditem"><img src="lyg2.webp" alt="Post 2"></div>
+        <div class="popup-ig-feeditem"><img src="lyg3.webp" alt="Post 3"></div>
+        <div class="popup-ig-feeditem"><img src="lyg4.webp" alt="Post 4"></div>
+        <div class="popup-ig-feeditem"><img src="lyg5.webp" alt="Post 5"></div>
+        <div class="popup-ig-feeditem"><img src="lyg6.webp" alt="Post 6"></div>
+        <div class="popup-ig-feeditem"><img src="lyg7.webp" alt="Post 7"></div>
+		<div class="popup-ig-feeditem"> <video src="lyg01.webm" controls playsinline muted loop></video> </div>
+		<div class="popup-ig-feeditem"> <video src="lyg02.webm" controls playsinline muted loop></video> </div>
+      </div>
+
+      <!-- Footer fijo -->
+      <div class="popup-ig-footer">
+    <img src="icon-home.webp" alt="home" class="icon">
+    <img src="icon-reel.webp" alt="reel" class="icon">
+    <img src="icon-share.webp" alt="share" class="icon">
+    <img src="icon-search.webp" alt="search" class="icon">
+    <img src="icon-user.webp" alt="user" class="icon">
+      </div>
+
+    </div>
+  </div>
+</div>
+	
+	<div id="popup7" class="popup-ig popup-over">
+  <div class="popup-ig-content">
+    <!-- Mockup overlay -->
+    <img src="mockup-phone.webp" alt="Mockup celular" class="popup-ig-overlay">
+
+    <!-- Pantalla interna -->
+    <div class="popup-ig-screen">
+      
+      <!-- Status bar -->
+      <div class="popup-ig-statusbar">
+        <span class="popup-ig-time">11:56</span>
+        <div class="popup-ig-statusicons">
+          <img src="icon-signal.webp" alt="Señal" class="popup-ig-statusicon">
+          <img src="icon-wifi.webp" alt="WiFi" class="popup-ig-statusicon">
+          <img src="icon-battery.webp" alt="Batería" class="popup-ig-statusicon">
+        </div>
+      </div>
+
+      <!-- Header del perfil -->
+      <div class="popup-ig-profileheader">
+        <img src="overline-perfil.webp" alt="Perfil" class="popup-ig-avatar">
+        <div class="popup-ig-profileinfo">
+          <span class="popup-ig-profilename">OverLine Agencia Graficá</span>
+          <span class="popup-ig-profilenote">Nota: Proyecto Integral</span>
+        </div>
+        <img src="icon-options.webp" alt="Opciones" class="popup-ig-iconoptions">
+      </div>
+
+      <!-- Servicios ofrecidos -->
+      <div class="popup-ig-profilestats">
+        <div class="popup-ig-stat">
+          <span class="popup-ig-statnumber">Concepto</span>
+          <span class="popup-ig-statlabel">Origen</span>
+        </div>
+        <div class="popup-ig-stat">
+          <span class="popup-ig-statnumber">Identidad</span>
+          <span class="popup-ig-statlabel">Marca</span>
+        </div>
+        <div class="popup-ig-stat">
+          <span class="popup-ig-statnumber">Digital</span>
+          <span class="popup-ig-statlabel">Experiencia</span>
+        </div>
+      </div>
+
+      <!-- Descripción -->
+      <div class="popup-ig-profiledesc">
+        <p>Con Overline Agencia Gráfica dimos vida a una propuesta única, creando desde cero una identidad que refleja nuestra visión y pasión. Desde el concepto inicial hasta la experiencia digital, construimos un universo gráfico que inspira, conecta y transmite la esencia de lo que somos.</p>
+      </div>
+
+      <!-- Tabs -->
+      <div class="popup-ig-tabs">
+        <span class="popup-ig-tab active">Posts</span>
+        <span class="popup-ig-tab">Reels</span>
+      </div>
+
+      <!-- Feed vertical -->
+      <div class="popup-ig-feed">
+        <div class="popup-ig-feeditem"><img src="over1.webp" alt="Post 1"></div>
+        <div class="popup-ig-feeditem"><img src="over2.webp" alt="Post 2"></div>
+        <div class="popup-ig-feeditem"><img src="over3.webp" alt="Post 3"></div>
+        <div class="popup-ig-feeditem"><img src="over4.webp" alt="Post 4"></div>
+        <div class="popup-ig-feeditem"><img src="over5.webp" alt="Post 3"></div>
+        <div class="popup-ig-feeditem"><img src="over6.webp" alt="Post 4"></div>
+		<div class="popup-ig-feeditem"> <video src="over1.webm" controls playsinline muted loop></video> </div>
+		<div class="popup-ig-feeditem"> <video src="over2.webm" controls playsinline muted loop></video> </div>
+		<div class="popup-ig-feeditem"> <video src="over3.webm" controls playsinline muted loop></video> </div>
+		<div class="popup-ig-feeditem"> <video src="over4.webm" controls playsinline muted loop></video> </div>
+		<div class="popup-ig-feeditem"> <video src="over5.webm" controls playsinline muted loop></video> </div>
+		<div class="popup-ig-feeditem"> <video src="over6.webm" controls playsinline muted loop></video> </div>
+		<div class="popup-ig-feeditem"> <video src="over7.webm" controls playsinline muted loop></video> </div>
+      </div>
+
+      <!-- Footer fijo -->
+      <div class="popup-ig-footer">
+    <img src="icon-home.webp" alt="home" class="icon">
+    <img src="icon-reel.webp" alt="reel" class="icon">
+    <img src="icon-share.webp" alt="share" class="icon">
+    <img src="icon-search.webp" alt="search" class="icon">
+    <img src="icon-user.webp" alt="user" class="icon">
+      </div>
+
+    </div>
+  </div>
+</div>
+	
+	<div id="popup8" class="popup-ig popup-jb">
+  <div class="popup-ig-content">
+    <!-- Mockup overlay -->
+    <img src="mockup-phone.webp" alt="Mockup celular" class="popup-ig-overlay">
+
+    <!-- Pantalla interna -->
+    <div class="popup-ig-screen">
+      
+      <!-- Status bar -->
+      <div class="popup-ig-statusbar">
+        <span class="popup-ig-time">11:56</span>
+        <div class="popup-ig-statusicons">
+          <img src="icon-signal.webp" alt="Señal" class="popup-ig-statusicon">
+          <img src="icon-wifi.webp" alt="WiFi" class="popup-ig-statusicon">
+          <img src="icon-battery.webp" alt="Batería" class="popup-ig-statusicon">
+        </div>
+      </div>
+
+      <!-- Header del perfil -->
+      <div class="popup-ig-profileheader">
+        <img src="jb-perfil.webp" alt="Perfil" class="popup-ig-avatar">
+        <div class="popup-ig-profileinfo">
+          <span class="popup-ig-profilename">JBurguers</span>
+          <span class="popup-ig-profilenote">Nota: Proyecto Gráfico</span>
+        </div>
+        <img src="icon-options.webp" alt="Opciones" class="popup-ig-iconoptions">
+      </div>
+
+      <!-- Servicios ofrecidos -->
+      <div class="popup-ig-profilestats">
+        <div class="popup-ig-stat">
+          <span class="popup-ig-statnumber">Diseño</span>
+          <span class="popup-ig-statlabel">Identidad</span>
+        </div>
+        <div class="popup-ig-stat">
+          <span class="popup-ig-statnumber">Piezas</span>
+          <span class="popup-ig-statlabel">Creatividad</span>
+        </div>
+        <div class="popup-ig-stat">
+          <span class="popup-ig-statnumber">Visual</span>
+          <span class="popup-ig-statlabel">Impacto</span>
+        </div>
+      </div>
+
+      <!-- Descripción -->
+      <div class="popup-ig-profiledesc">
+        <p>Con JBurguers llevamos su sabor y estilo al plano visual, creando piezas gráficas que transmiten autenticidad y energía. Cada diseño fortaleció su identidad y permitió que la marca conectara con sus clientes de manera atractiva y memorable.</p>
+      </div>
+
+      <!-- Tabs -->
+      <div class="popup-ig-tabs">
+        <span class="popup-ig-tab active">Posts</span>
+        <span class="popup-ig-tab">Reels</span>
+      </div>
+
+      <!-- Feed vertical -->
+      <div class="popup-ig-feed">
+        <div class="popup-ig-feeditem"><img src="jb1.webp" alt="Post 1"></div>
+        <div class="popup-ig-feeditem"><img src="jb2.webp" alt="Post 2"></div>
+      </div>
+
+      <!-- Footer fijo -->
+      <div class="popup-ig-footer">
+    <img src="icon-home.webp" alt="home" class="icon">
+    <img src="icon-reel.webp" alt="reel" class="icon">
+    <img src="icon-share.webp" alt="share" class="icon">
+    <img src="icon-search.webp" alt="search" class="icon">
+    <img src="icon-user.webp" alt="user" class="icon">
+      </div>
+
+    </div>
+  </div>
+</div>
+	
+	<div id="popup9" class="popup-ig popup-byg">
+  <div class="popup-ig-content">
+    <!-- Mockup overlay -->
+    <img src="mockup-phone.webp" alt="Mockup celular" class="popup-ig-overlay">
+
+    <!-- Pantalla interna -->
+    <div class="popup-ig-screen">
+      
+      <!-- Status bar -->
+      <div class="popup-ig-statusbar">
+        <span class="popup-ig-time">11:56</span>
+        <div class="popup-ig-statusicons">
+          <img src="icon-signal.webp" alt="Señal" class="popup-ig-statusicon">
+          <img src="icon-wifi.webp" alt="WiFi" class="popup-ig-statusicon">
+          <img src="icon-battery.webp" alt="Batería" class="popup-ig-statusicon">
+        </div>
+      </div>
+
+      <!-- Header del perfil -->
+      <div class="popup-ig-profileheader">
+        <img src="B&E-perfil.webp" alt="Perfil" class="popup-ig-avatar">
+        <div class="popup-ig-profileinfo">
+          <span class="popup-ig-profilename">B&E (Bandas y Estructuras)</span>
+          <span class="popup-ig-profilenote">Nota: Proyecto Branding & Gráfico</span>
+        </div>
+        <img src="icon-options.webp" alt="Opciones" class="popup-ig-iconoptions">
+      </div>
+
+      <!-- Servicios ofrecidos -->
+      <div class="popup-ig-profilestats">
+        <div class="popup-ig-stat">
+          <span class="popup-ig-statnumber">Logo</span>
+          <span class="popup-ig-statlabel">Identidad</span>
+        </div>
+        <div class="popup-ig-stat">
+          <span class="popup-ig-statnumber">Brochure</span>
+          <span class="popup-ig-statlabel">Presentación</span>
+        </div>
+        <div class="popup-ig-stat">
+          <span class="popup-ig-statnumber">Tarjetas</span>
+          <span class="popup-ig-statlabel">Profesionalismo</span>
+        </div>
+      </div>
+
+      <!-- Descripción -->
+      <div class="popup-ig-profiledesc">
+        <p>Con B&E construimos desde la gráfica una identidad que refleja confianza y solidez. El diseño de su logo, brochure y tarjetas permitió transmitir profesionalismo y proyectar la esencia de la marca en cada detalle.</p>
+      </div>
+
+      <!-- Tabs -->
+      <div class="popup-ig-tabs">
+        <span class="popup-ig-tab active">Posts</span>
+        <span class="popup-ig-tab">Reels</span>
+      </div>
+
+      <!-- Feed vertical -->
+      <div class="popup-ig-feed">
+        <div class="popup-ig-feeditem"><img src="B&E1.webp" alt="Post 1"></div>
+        <div class="popup-ig-feeditem"><img src="B&E2.webp" alt="Post 2"></div>
+        <div class="popup-ig-feeditem"><img src="B&E3.webp" alt="Post 3"></div>
+        <div class="popup-ig-feeditem"><img src="B&E4.webp" alt="Post 4"></div>
+        <div class="popup-ig-feeditem"><img src="B&E5.webp" alt="Post 5"></div>
+        <div class="popup-ig-feeditem"><img src="B&E6.webp" alt="Post 6"></div>
+      </div>
+
+      <!-- Footer fijo -->
+      <div class="popup-ig-footer">
+    <img src="icon-home.webp" alt="home" class="icon">
+    <img src="icon-reel.webp" alt="reel" class="icon">
+    <img src="icon-share.webp" alt="share" class="icon">
+    <img src="icon-search.webp" alt="search" class="icon">
+    <img src="icon-user.webp" alt="user" class="icon">
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+<section id="overline-marketplace">
+  <h2 class="overline-title">Catálogo de Servicios</h2>
+
+  <!-- Filtros -->
+  <div class="overline-filters">
+    <button onclick="filterServices('all')">Todos</button>
+    <button onclick="filterServices('audiovisual')">Audiovisual</button>
+    <button onclick="filterServices('fotografia')">Fotografía</button>
+    <button onclick="filterServices('branding')">Branding</button>
+    <button onclick="filterServices('papeleria')">Papelería</button>
+    <button onclick="filterServices('redes')">Redes</button>
+    <button onclick="filterServices('streaming')">Streaming</button>
+    <button onclick="filterServices('copy')">Copy & Campañas</button>
+    <button onclick="filterServices('eventos')">Eventos</button>
+    <button onclick="filterServices('extras')">Extras</button>
+	<button onclick="sortServices('asc')">Ordenar ↑ Precio</button>
+	<button onclick="sortServices('desc')">Ordenar ↓ Precio</button>
+  </div>
+
+  <!-- Grid de servicios -->
+<div class="overline-services-container"> 
+	<div class="overline-services-grid">
+
+  <!-- 🎬 Audiovisuales -->
+  <div class="overline-card" data-category="audiovisual" data-name="Reel Básico" data-price="100000" data-desc="Video vertical de hasta 30s con edición básica, música y subtítulos.">
+    <h3>🎬 Reel Básico</h3>
+    <p class="overline-price">$100.000 COP / $27 USD</p>
+    <div class="overline-actions">
+      <button class="overline-btn-add" onclick="addService('Reel Básico',100000)">Agregar</button>
+      <button class="overline-btn-info" onclick="showInfo(this)">ℹ️</button>
+    </div>
+  </div>
+  <div class="overline-card" data-category="audiovisual" data-name="Reel Avanzado" data-price="250000" data-desc="Producción con grabación presencial, edición intermedia y elementos gráficos.">
+    <h3>🎬 Reel Avanzado</h3>
+    <p class="overline-price">$250.000 COP / $68 USD</p>
+    <div class="overline-actions">
+      <button class="overline-btn-add" onclick="addService('Reel Avanzado',250000)">Agregar</button>
+      <button class="overline-btn-info" onclick="showInfo(this)">ℹ️</button>
+    </div>
+  </div>
+  <div class="overline-card" data-category="audiovisual" data-name="Reel Pro" data-price="200000" data-desc="Grabación y edición profesional de hasta 1 minuto.">
+    <h3>🎬 Reel Pro</h3>
+    <p class="overline-price">$200.000 COP / $55 USD</p>
+    <div class="overline-actions">
+      <button class="overline-btn-add" onclick="addService('Reel Pro',200000)">Agregar</button>
+      <button class="overline-btn-info" onclick="showInfo(this)">ℹ️</button>
+    </div>
+  </div>
+  <div class="overline-card" data-category="audiovisual" data-name="Reel Cine" data-price="350000" data-desc="Estilo cinematográfico con guion corto, dirección y color grading.">
+  <h3>🎬 Reel Cine</h3>
+  <p class="overline-price">$350.000 COP / $95 USD</p>
+  <div class="overline-actions">
+    <button class="overline-btn-add" onclick="addService('Reel Cine',350000)">Agregar</button>
+    <button class="overline-btn-info" onclick="showInfo(this)">ℹ️</button>
+  </div>
+</div>
+
+<div class="overline-card" data-category="audiovisual" data-name="Reel en Serie (x3)" data-price="280000" data-desc="Tres reels secuenciales con narrativa unificada.">
+  <h3>🎬 Reel en Serie (x3)</h3>
+  <p class="overline-price">$280.000 COP / $76 USD</p>
+  <div class="overline-actions">
+    <button class="overline-btn-add" onclick="addService('Reel en Serie (x3)',280000)">Agregar</button>
+    <button class="overline-btn-info" onclick="showInfo(this)">ℹ️</button>
+  </div>
+</div>
+
+<div class="overline-card" data-category="audiovisual" data-name="Formato Rápido" data-price="80000" data-desc="Video corto de hasta 30s, edición express para tendencias.">
+  <h3>🎬 Formato Rápido</h3>
+  <p class="overline-price">$80.000 COP / $22 USD</p>
+  <div class="overline-actions">
+    <button class="overline-btn-add" onclick="addService('Formato Rápido',80000)">Agregar</button>
+    <button class="overline-btn-info" onclick="showInfo(this)">ℹ️</button>
+  </div>
+</div>
+
+<div class="overline-card" data-category="audiovisual" data-name="Solo Edítalo" data-price="70000" data-desc="Edición de material enviado con cortes, música y textos.">
+  <h3>🎬 Solo Edítalo</h3>
+  <p class="overline-price">$70.000 COP / $19 USD</p>
+  <div class="overline-actions">
+    <button class="overline-btn-add" onclick="addService('Solo Edítalo',70000)">Agregar</button>
+    <button class="overline-btn-info" onclick="showInfo(this)">ℹ️</button>
+  </div>
+</div>
+
+<div class="overline-card" data-category="audiovisual" data-name="Testimonial Pro" data-price="180000" data-desc="Video entrevista con audio optimizado y narrativa emocional.">
+  <h3>🎬 Testimonial Pro</h3>
+  <p class="overline-price">$180.000 COP / $49 USD</p>
+  <div class="overline-actions">
+    <button class="overline-btn-add" onclick="addService('Testimonial Pro',180000)">Agregar</button>
+    <button class="overline-btn-info" onclick="showInfo(this)">ℹ️</button>
+  </div>
+</div>
+
+<div class="overline-card" data-category="audiovisual" data-name="Video Producto Lifestyle" data-price="220000" data-desc="Producto en uso real o entorno natural, duración 30–60s.">
+  <h3>🎬 Video Producto Lifestyle</h3>
+  <p class="overline-price">$220.000 COP / $60 USD</p>
+  <div class="overline-actions">
+    <button class="overline-btn-add" onclick="addService('Video Producto Lifestyle',220000)">Agregar</button>
+    <button class="overline-btn-info" onclick="showInfo(this)">ℹ️</button>
+  </div>
+</div>
+
+  <!-- 📸 Fotografía -->
+  <div class="overline-card" data-category="fotografia" data-name="Producto Express" data-price="200000" data-desc="10 productos, fondo neutro, 15–20 fotos editadas.">
+    <h3>📸 Producto Express</h3>
+    <p class="overline-price">$200.000 COP / $55 USD</p>
+    <div class="overline-actions">
+      <button class="overline-btn-add" onclick="addService('Producto Express',200000)">Agregar</button>
+      <button class="overline-btn-info" onclick="showInfo(this)">ℹ️</button>
+    </div>
+  </div>
+  <div class="overline-card" data-category="fotografia" data-name="Marca Visual" data-price="350000" data-desc="Locación + props, branding visual, 30–40 fotos editadas.">
+    <h3>📸 Marca Visual</h3>
+    <p class="overline-price">$350.000 COP / $95 USD</p>
+    <div class="overline-actions">
+      <button class="overline-btn-add" onclick="addService('Marca Visual',350000)">Agregar</button>
+      <button class="overline-btn-info" onclick="showInfo(this)">ℹ️</button>
+    </div>
+  </div>
+	<div class="overline-card" data-category="fotografia" data-name="Sesión Creativa Pro" data-price="500000" data-desc="Concepto visual, dirección de arte, 50 fotos aprox.">
+  <h3>📸 Sesión Creativa Pro</h3>
+  <p class="overline-price">$500.000 COP / $137 USD</p>
+  <div class="overline-actions">
+    <button class="overline-btn-add" onclick="addService('Sesión Creativa Pro',500000)">Agregar</button>
+    <button class="overline-btn-info" onclick="showInfo(this)">ℹ️</button>
+  </div>
+</div>
+
+<div class="overline-card" data-category="fotografia" data-name="Mini Producto (x5)" data-price="120000" data-desc="Fotografía rápida de hasta 5 productos, 10–15 fotos editadas.">
+  <h3>📸 Mini Producto (x5)</h3>
+  <p class="overline-price">$120.000 COP / $33 USD</p>
+  <div class="overline-actions">
+    <button class="overline-btn-add" onclick="addService('Mini Producto (x5)',120000)">Agregar</button>
+    <button class="overline-btn-info" onclick="showInfo(this)">ℹ️</button>
+  </div>
+</div>
+
+<div class="overline-card" data-category="fotografia" data-name="Pack Contenido Mensual (foto+video)" data-price="600000" data-desc="50 fotos variadas + 4 videos básicos.">
+  <h3>📸 Pack Contenido Mensual</h3>
+  <p class="overline-price">$600.000 COP / $165 USD</p>
+  <div class="overline-actions">
+    <button class="overline-btn-add" onclick="addService('Pack Contenido Mensual (foto+video)',600000)">Agregar</button>
+    <button class="overline-btn-info" onclick="showInfo(this)">ℹ️</button>
+  </div>
+</div>
+
+<div class="overline-card" data-category="fotografia" data-name="Pack Rebranding Visual" data-price="700000" data-desc="Logo Pro, sesión de marca (40 fotos), 2 reels, portadas visuales, hoja membretada.">
+  <h3>📸 Pack Rebranding Visual</h3>
+  <p class="overline-price">$700.000 COP / $192 USD</p>
+  <div class="overline-actions">
+    <button class="overline-btn-add" onclick="addService('Pack Rebranding Visual',700000)">Agregar</button>
+    <button class="overline-btn-info" onclick="showInfo(this)">ℹ️</button>
+  </div>
+</div>
+
+  <!-- 🎨 Branding -->
+  <div class="overline-card" data-category="branding" data-name="Logo Esencial" data-price="250000" data-desc="2 propuestas, ajustes incluidos, manual básico de uso.">
+    <h3>🎨 Logo Esencial</h3>
+    <p class="overline-price">$250.000 COP / $68 USD</p>
+    <div class="overline-actions">
+      <button class="overline-btn-add" onclick="addService('Logo Esencial',250000)">Agregar</button>
+      <button class="overline-btn-info" onclick="showInfo(this)">ℹ️</button>
+    </div>
+  </div>
+  <div class="overline-card" data-category="branding" data-name="Logo Pro" data-price="400000" data-desc="3 propuestas, entrega en todos los formatos, manual de marca básico.">
+    <h3>🎨 Logo Pro</h3>
+    <p class="overline-price">$400.000 COP / $110 USD</p>
+    <div class="overline-actions">
+      <button class="overline-btn-add" onclick="addService('Logo Pro',400000)">Agregar</button>
+      <button class="overline-btn-info" onclick="showInfo(this)">ℹ️</button>
+    </div>
+  </div>
+	  <div class="overline-card" data-category="branding" data-name="Rediseño de Logo" data-price="200000" data-desc="Modernización de logo existente, variantes y archivos optimizados.">
+  <h3>🎨 Rediseño de Logo</h3>
+  <p class="overline-price">$200.000 COP / $55 USD</p>
+  <div class="overline-actions">
+    <button class="overline-btn-add" onclick="addService('Rediseño de Logo',200000)">Agregar</button>
+    <button class="overline-btn-info" onclick="showInfo(this)">ℹ️</button>
+  </div>
+</div>
+
+<div class="overline-card" data-category="branding" data-name="Naming Creativo" data-price="180000" data-desc="Creación de nombre de marca, enfoque estratégico, validación de dominio.">
+  <h3>🎨 Naming Creativo</h3>
+  <p class="overline-price">$180.000 COP / $49 USD</p>
+  <div class="overline-actions">
+    <button class="overline-btn-add" onclick="addService('Naming Creativo',180000)">Agregar</button>
+    <button class="overline-btn-info" onclick="showInfo(this)">ℹ️</button>
+  </div>
+</div>
+
+<div class="overline-card" data-category="branding" data-name="Manual de Marca Completo" data-price="600000" data-desc="Logo, tipografías, paleta de color, tono visual y aplicaciones gráficas.">
+  <h3>🎨 Manual de Marca Completo</h3>
+  <p class="overline-price">$600.000 COP / $165 USD</p>
+  <div class="overline-actions">
+    <button class="overline-btn-add" onclick="addService('Manual de Marca Completo',600000)">Agregar</button>
+    <button class="overline-btn-info" onclick="showInfo(this)">ℹ️</button>
+  </div>
+</div>
+	<div class="overline-card" data-category="branding" data-name="Combo Marca Starter" data-price="350000" data-desc="Logo esencial + papelería básica + plantilla editable para redes.">
+  <h3>🎨 Combo Marca Starter</h3>
+  <p class="overline-price">$350.000 COP / $95 USD</p>
+  <div class="overline-actions">
+    <button class="overline-btn-add" onclick="addService('Combo Marca Starter',350000)">Agregar</button>
+    <button class="overline-btn-info" onclick="showInfo(this)">ℹ️</button>
+  </div>
+</div>
+
+<div class="overline-card" data-category="branding" data-name="Combo Marca Pro" data-price="550000" data-desc="Logo Pro + papelería profesional + 3 plantillas para redes.">
+  <h3>🎨 Combo Marca Pro</h3>
+  <p class="overline-price">$550.000 COP / $150 USD</p>
+  <div class="overline-actions">
+    <button class="overline-btn-add" onclick="addService('Combo Marca Pro',550000)">Agregar</button>
+    <button class="overline-btn-info" onclick="showInfo(this)">ℹ️</button>
+  </div>
+</div>
+
+  <!-- 📝 Papelería -->
+  <div class="overline-card" data-category="papeleria" data-name="Tarjeta de Presentación" data-price="80000" data-desc="Diseño físico y digital adaptado a tu identidad visual.">
+    <h3>📝 Tarjeta de Presentación</h3>
+    <p class="overline-price">$80.000 COP / $22 USD</p>
+    <div class="overline-actions">
+      <button class="overline-btn-add" onclick="addService('Tarjeta de Presentación',80000)">Agregar</button>
+      <button class="overline-btn-info" onclick="showInfo(this)">ℹ️</button>
+    </div>
+  </div>
+	  <div class="overline-card" data-category="papeleria" data-name="Hoja Membretada + Cotización" data-price="120000" data-desc="Diseño institucional editable y plantilla profesional para documentos.">
+  <h3>📝 Hoja Membretada + Cotización</h3>
+  <p class="overline-price">$120.000 COP / $33 USD</p>
+  <div class="overline-actions">
+    <button class="overline-btn-add" onclick="addService('Hoja Membretada + Cotización',120000)">Agregar</button>
+    <button class="overline-btn-info" onclick="showInfo(this)">ℹ️</button>
+  </div>
+</div>
+
+<div class="overline-card" data-category="papeleria" data-name="Kit Corporativo Pro" data-price="300000" data-desc="Incluye tarjeta, hoja membretada, firma HTML y plantilla editable.">
+  <h3>📝 Kit Corporativo Pro</h3>
+  <p class="overline-price">$300.000 COP / $82 USD</p>
+  <div class="overline-actions">
+    <button class="overline-btn-add" onclick="addService('Kit Corporativo Pro',300000)">Agregar</button>
+    <button class="overline-btn-info" onclick="showInfo(this)">ℹ️</button>
+  </div>
+</div>
+
+<div class="overline-card" data-category="papeleria" data-name="Certificado o Constancia" data-price="100000" data-desc="Diseño institucional personalizado con identidad visual.">
+  <h3>📝 Certificado o Constancia</h3>
+  <p class="overline-price">$100.000 COP / $27 USD</p>
+  <div class="overline-actions">
+    <button class="overline-btn-add" onclick="addService('Certificado o Constancia',100000)">Agregar</button>
+    <button class="overline-btn-info" onclick="showInfo(this)">ℹ️</button>
+  </div>
+</div>
+
+<div class="overline-card" data-category="papeleria" data-name="Stickers Promocionales" data-price="80000" data-desc="Diseño de hasta 3 etiquetas o adhesivos acorde a tu branding.">
+  <h3>📝 Stickers Promocionales</h3>
+  <p class="overline-price">$80.000 COP / $22 USD</p>
+  <div class="overline-actions">
+    <button class="overline-btn-add" onclick="addService('Stickers Promocionales',80000)">Agregar</button>
+    <button class="overline-btn-info" onclick="showInfo(this)">ℹ️</button>
+  </div>
+</div>
+
+<div class="overline-card" data-category="papeleria" data-name="Plantilla Canva Editable" data-price="60000" data-desc="Plantilla adaptable para post, carrusel o historia, editable desde Canva.">
+  <h3>📝 Plantilla Canva Editable</h3>
+  <p class="overline-price">$60.000 COP / $16 USD</p>
+  <div class="overline-actions">
+    <button class="overline-btn-add" onclick="addService('Plantilla Canva Editable',60000)">Agregar</button>
+    <button class="overline-btn-info" onclick="showInfo(this)">ℹ️</button>
+  </div>
+  </div>
+
+  <!-- 📱 Redes -->
+  <div class="overline-card" data-category="redes" data-name="Carrusel 10x" data-price="80000" data-desc="Carrusel de 10 slides con diseño atractivo y estratégico.">
+    <h3>📱 Carrusel 10x</h3>
+    <p class="overline-price">$80.000 COP / $22 USD</p>
+    <div class="overline-actions">
+      <button class="overline-btn-add" onclick="addService('Carrusel 10x',80000)">Agregar</button>
+      <button class="overline-btn-info" onclick="showInfo(this)">ℹ️</button>
+    </div>
+  </div>
+	<div class="overline-card" data-category="redes" data-name="Post Único" data-price="40000" data-desc="Pieza gráfica para feed o historia.">
+  <h3>📱 Post Único</h3>
+  <p class="overline-price">$40.000 COP / $11 USD</p>
+  <div class="overline-actions">
+    <button class="overline-btn-add" onclick="addService('Post Único',40000)">Agregar</button>
+    <button class="overline-btn-info" onclick="showInfo(this)">ℹ️</button>
+  </div>
+</div>
+
+<div class="overline-card" data-category="redes" data-name="Mini Portada para Reels" data-price="50000" data-desc="Diseño de portada visual para reels o videos verticales.">
+  <h3>📱 Mini Portada para Reels</h3>
+  <p class="overline-price">$50.000 COP / $14 USD</p>
+  <div class="overline-actions">
+    <button class="overline-btn-add" onclick="addService('Mini Portada para Reels',50000)">Agregar</button>
+    <button class="overline-btn-info" onclick="showInfo(this)">ℹ️</button>
+  </div>
+</div>
+
+<div class="overline-card" data-category="redes" data-name="Miniatura Impacto (YouTube)" data-price="70000" data-desc="Diseño tipo YouTube enfocado en generar clics.">
+  <h3>📱 Miniatura Impacto</h3>
+  <p class="overline-price">$70.000 COP / $19 USD</p>
+  <div class="overline-actions">
+    <button class="overline-btn-add" onclick="addService('Miniatura Impacto (YouTube)',70000)">Agregar</button>
+    <button class="overline-btn-info" onclick="showInfo(this)">ℹ️</button>
+  </div>
+</div>
+
+<div class="overline-card" data-category="redes" data-name="Portada para Canal" data-price="100000" data-desc="Banner para YouTube, Twitch o redes.">
+  <h3>📱 Portada para Canal</h3>
+  <p class="overline-price">$100.000 COP / $27 USD</p>
+  <div class="overline-actions">
+    <button class="overline-btn-add" onclick="addService('Portada para Canal',100000)">Agregar</button>
+    <button class="overline-btn-info" onclick="showInfo(this)">ℹ️</button>
+  </div>
+</div>
+
+<div class="overline-card" data-category="redes" data-name="Diseño de Avatar" data-price="60000" data-desc="Imagen de perfil personalizada, ideal para marcas y creadores.">
+  <h3>📱 Diseño de Avatar</h3>
+  <p class="overline-price">$60.000 COP / $16 USD</p>
+  <div class="overline-actions">
+    <button class="overline-btn-add" onclick="addService('Diseño de Avatar',60000)">Agregar</button>
+    <button class="overline-btn-info" onclick="showInfo(this)">ℹ️</button>
+  </div>
+</div>
+
+<div class="overline-card" data-category="redes" data-name="Collage Digital" data-price="80000" data-desc="Collage visual con fotos o productos.">
+  <h3>📱 Collage Digital</h3>
+  <p class="overline-price">$80.000 COP / $22 USD</p>
+  <div class="overline-actions">
+    <button class="overline-btn-add" onclick="addService('Collage Digital',80000)">Agregar</button>
+    <button class="overline-btn-info" onclick="showInfo(this)">ℹ️</button>
+  </div>
+</div>
+<div class="overline-card" data-category="redes" data-name="Formato Adicional (adaptación)" data-price="40000" data-desc="Adaptación de una pieza a otro tamaño o red.">
+  <h3>📱 Formato Adicional</h3>
+  <p class="overline-price">$40.000 COP / $11 USD</p>
+  <div class="overline-actions">
+    <button class="overline-btn-add" onclick="addService('Formato Adicional (adaptación)',40000)">Agregar</button>
+    <button class="overline-btn-info" onclick="showInfo(this)">ℹ️</button>
+  </div>
+</div>
+
+  <!-- 🎮 Streaming -->
+  <div class="overline-card" data-category="streaming" data-name="Overlay Supreme" data-price="250000" data-desc="Diseño completo para transmisiones, compatible con OBS y Streamlabs.">
+    <h3>🎮 Overlay Supreme</h3>
+    <p class="overline-price">$250.000 COP / $68 USD</p>
+    <div class="overline-actions">
+      <button class="overline-btn-add" onclick="addService('Overlay Supreme',250000)">Agregar</button>
+      <button class="overline-btn-info" onclick="showInfo(this)">ℹ️</button>
+    </div>
+  </div>
+  <div class="overline-card" data-category="streaming" data-name="Intermedios Pro" data-price="150000" data-desc="Pantallas de transición profesionales para streamings.">
+  <h3>🎮 Intermedios Pro</h3>
+  <p class="overline-price">$150.000 COP / $41 USD</p>
+  <div class="overline-actions">
+    <button class="overline-btn-add" onclick="addService('Intermedios Pro',150000)">Agregar</button>
+    <button class="overline-btn-info" onclick="showInfo(this)">ℹ️</button>
+  </div>
+</div>
+
+<div class="overline-card" data-category="streaming" data-name="Kit Full Stream" data-price="500000" data-desc="Overlay, alertas, intermedios y paneles completos para streaming.">
+  <h3>🎮 Kit Full Stream</h3>
+  <p class="overline-price">$500.000 COP / $137 USD</p>
+  <div class="overline-actions">
+    <button class="overline-btn-add" onclick="addService('Kit Full Stream',500000)">Agregar</button>
+    <button class="overline-btn-info" onclick="showInfo(this)">ℹ️</button>
+  </div>
+</div>
+
+<div class="overline-card" data-category="streaming" data-name="Alert Pack" data-price="120000" data-desc="Paquete de alertas animadas para streamings.">
+  <h3>🎮 Alert Pack</h3>
+  <p class="overline-price">$120.000 COP / $33 USD</p>
+  <div class="overline-actions">
+    <button class="overline-btn-add" onclick="addService('Alert Pack',120000)">Agregar</button>
+    <button class="overline-btn-info" onclick="showInfo(this)">ℹ️</button>
+  </div>
+</div>
+
+<div class="overline-card" data-category="streaming" data-name="Intro Logo Animada" data-price="200000" data-desc="Animación de logo para introducciones de video o streaming.">
+  <h3>🎮 Intro Logo Animada</h3>
+  <p class="overline-price">$200.000 COP / $55 USD</p>
+  <div class="overline-actions">
+    <button class="overline-btn-add" onclick="addService('Intro Logo Animada',200000)">Agregar</button>
+    <button class="overline-btn-info" onclick="showInfo(this)">ℹ️</button>
+  </div>
+</div>
+
+  <!-- ✍️ Copy -->
+  <div class="overline-card" data-category="copy" data-name="Copywriting Pro" data-price="100000" data-desc="Textos para redes o publicidad adaptados al tono de tu marca.">
+    <h3>✍️ Copywriting Pro</h3>
+    <p class="overline-price">$100.000 COP / $27 USD</p>
+    <div class="overline-actions">
+      <button class="overline-btn-add" onclick="addService('Copywriting Pro',100000)">Agregar</button>
+      <button class="overline-btn-info" onclick="showInfo(this)">ℹ️</button>
+    </div>
+  </div>
+  <div class="overline-card" data-category="copy" data-name="Asesoría Estratégica" data-price="150000" data-desc="Sesión de estrategia para comunicación y marketing digital.">
+  <h3>✍️ Asesoría Estratégica</h3>
+  <p class="overline-price">$150.000 COP / $41 USD</p>
+  <div class="overline-actions">
+    <button class="overline-btn-add" onclick="addService('Asesoría Estratégica',150000)">Agregar</button>
+    <button class="overline-btn-info" onclick="showInfo(this)">ℹ️</button>
+  </div>
+</div>
+
+<div class="overline-card" data-category="copy" data-name="Guion para Reel o Video" data-price="100000" data-desc="Guion creativo y estructurado para producción audiovisual.">
+  <h3>✍️ Guion para Reel o Video</h3>
+  <p class="overline-price">$100.000 COP / $27 USD</p>
+  <div class="overline-actions">
+    <button class="overline-btn-add" onclick="addService('Guion para Reel o Video',100000)">Agregar</button>
+    <button class="overline-btn-info" onclick="showInfo(this)">ℹ️</button>
+  </div>
+</div>
+
+<div class="overline-card" data-category="copy" data-name="Campaña Meta Ads (1)" data-price="250000" data-desc="Configuración y gestión de una campaña publicitaria en Meta Ads.">
+  <h3>✍️ Campaña Meta Ads (1)</h3>
+  <p class="overline-price">$250.000 COP / $68 USD</p>
+  <div class="overline-actions">
+    <button class="overline-btn-add" onclick="addService('Campaña Meta Ads (1)',250000)">Agregar</button>
+    <button class="overline-btn-info" onclick="showInfo(this)">ℹ️</button>
+  </div>
+</div>
+
+<div class="overline-card" data-category="copy" data-name="Pauta Mensual (gestión)" data-price="400000" data-desc="Gestión mensual de campañas publicitarias en redes sociales.">
+  <h3>✍️ Pauta Mensual (gestión)</h3>
+  <p class="overline-price">$400.000 COP / $110 USD</p>
+  <div class="overline-actions">
+    <button class="overline-btn-add" onclick="addService('Pauta Mensual (gestión)',400000)">Agregar</button>
+    <button class="overline-btn-info" onclick="showInfo(this)">ℹ️</button>
+  </div>
+</div>
+
+    <!-- 🎉 Eventos -->
+  <div class="overline-card" data-category="eventos" data-name="Bodas Recuerdo Eterno" data-price="500000" data-desc="20 fotos editadas y video resumen del evento.">
+    <h3>🎉 Bodas Recuerdo Eterno</h3>
+    <p class="overline-price">$500.000 COP / $137 USD</p>
+    <div class="overline-actions">
+      <button class="overline-btn-add" onclick="addService('Bodas Recuerdo Eterno',500000)">Agregar</button>
+      <button class="overline-btn-info" onclick="showInfo(this)">ℹ️</button>
+    </div>
+  </div>
+
+  <div class="overline-card" data-category="eventos" data-name="Boda Clásica" data-price="800000" data-desc="40 fotos y video corto editado.">
+    <h3>🎉 Boda Clásica</h3>
+    <p class="overline-price">$800.000 COP / $220 USD</p>
+    <div class="overline-actions">
+      <button class="overline-btn-add" onclick="addService('Boda Clásica',800000)">Agregar</button>
+      <button class="overline-btn-info" onclick="showInfo(this)">ℹ️</button>
+    </div>
+  </div>
+
+  <div class="overline-card" data-category="eventos" data-name="Boda Premium" data-price="1200000" data-desc="Cobertura completa con 80 fotos y video completo de la boda.">
+    <h3>🎉 Boda Premium</h3>
+    <p class="overline-price">$1.200.000 COP / $327 USD</p>
+    <div class="overline-actions">
+      <button class="overline-btn-add" onclick="addService('Boda Premium',1200000)">Agregar</button>
+      <button class="overline-btn-info" onclick="showInfo(this)">ℹ️</button>
+    </div>
+  </div>
+
+  <div class="overline-card" data-category="eventos" data-name="Celebraciones Momentos Express" data-price="250000" data-desc="15 fotos y clips espontáneos del evento.">
+    <h3>🎉 Celebraciones Momentos Express</h3>
+    <p class="overline-price">$250.000 COP / $68 USD</p>
+    <div class="overline-actions">
+      <button class="overline-btn-add" onclick="addService('Celebraciones Momentos Express',250000)">Agregar</button>
+      <button class="overline-btn-info" onclick="showInfo(this)">ℹ️</button>
+    </div>
+  </div>
+
+  <div class="overline-card" data-category="eventos" data-name="Evento Familiar" data-price="400000" data-desc="35 fotos y video de 1 minuto.">
+    <h3>🎉 Evento Familiar</h3>
+    <p class="overline-price">$400.000 COP / $110 USD</p>
+    <div class="overline-actions">
+      <button class="overline-btn-add" onclick="addService('Evento Familiar',400000)">Agregar</button>
+      <button class="overline-btn-info" onclick="showInfo(this)">ℹ️</button>
+    </div>
+  </div>
+
+  <div class="overline-card" data-category="eventos" data-name="Full Celebración" data-price="700000" data-desc="60 fotos y video final editado profesionalmente.">
+    <h3>🎉 Full Celebración</h3>
+    <p class="overline-price">$700.000 COP / $192 USD</p>
+    <div class="overline-actions">
+      <button class="overline-btn-add" onclick="addService('Full Celebración',700000)">Agregar</button>
+      <button class="overline-btn-info" onclick="showInfo(this)">ℹ️</button>
+    </div>
+  </div>
+
+  <div class="overline-card" data-category="eventos" data-name="Cobertura Básica Corporativa" data-price="350000" data-desc="25 fotos y clips sueltos del evento corporativo.">
+    <h3>🎉 Cobertura Básica Corporativa</h3>
+    <p class="overline-price">$350.000 COP / $95 USD</p>
+    <div class="overline-actions">
+      <button class="overline-btn-add" onclick="addService('Cobertura Básica Corporativa',350000)">Agregar</button>
+      <button class="overline-btn-info" onclick="showInfo(this)">ℹ️</button>
+    </div>
+  </div>
+
+  <div class="overline-card" data-category="eventos" data-name="Jornada Completa Corporativa" data-price="600000" data-desc="50 fotos y video resumen del evento corporativo.">
+    <h3>🎉 Jornada Completa Corporativa</h3>
+    <p class="overline-price">$600.000 COP / $165 USD</p>
+    <div class="overline-actions">
+      <button class="overline-btn-add" onclick="addService('Jornada Completa Corporativa',600000)">Agregar</button>
+      <button class="overline-btn-info" onclick="showInfo(this)">ℹ️</button>
+    </div>
+  </div>
+
+  <div class="overline-card" data-category="eventos" data-name="Evento Premium Corporativo" data-price="1000000" data-desc="80 fotos y video completo con storytelling.">
+    <h3>🎉 Evento Premium Corporativo</h3>
+    <p class="overline-price">$1.000.000 COP / $273 USD</p>
+    <div class="overline-actions">
+      <button class="overline-btn-add" onclick="addService('Evento Premium Corporativo',1000000)">Agregar</button>
+      <button class="overline-btn-info" onclick="showInfo(this)">ℹ️</button>
+    </div>
+  </div>
+
+  <!-- ➕ Extras -->
+  <div class="overline-card" data-category="extras" data-name="Reel Adicional" data-price="100000" data-desc="Producción y edición profesional de 1 reel adicional.">
+    <h3>➕ Reel Adicional</h3>
+    <p class="overline-price">$100.000 COP / $27 USD</p>
+    <div class="overline-actions">
+      <button class="overline-btn-add" onclick="addService('Reel Adicional',100000)">Agregar</button>
+      <button class="overline-btn-info" onclick="showInfo(this)">ℹ️</button>
+    </div>
+  </div>
+
+  <div class="overline-card" data-category="extras" data-name="Carrusel Adicional" data-price="80000" data-desc="Diseño personalizado de carrusel de 10 slides.">
+    <h3>➕ Carrusel Adicional</h3>
+    <p class="overline-price">$80.000 COP / $22 USD</p>
+    <div class="overline-actions">
+      <button class="overline-btn-add" onclick="addService('Carrusel Adicional',80000)">Agregar</button>
+      <button class="overline-btn-info" onclick="showInfo(this)">ℹ️</button>
+    </div>
+  </div>
+
+  <div class="overline-card" data-category="extras" data-name="Portada Extra" data-price="50000" data-desc="Diseño de portada visual impactante para feed o reels.">
+    <h3>➕ Portada Extra</h3>
+    <p class="overline-price">$50.000 COP / $14 USD</p>
+    <div class="overline-actions">
+      <button class="overline-btn-add" onclick="addService('Portada Extra',50000)">Agregar</button>
+      <button class="overline-btn-info" onclick="showInfo(this)">ℹ️</button>
+    </div>
+  </div>
+
+  <div class="overline-card" data-category="extras" data-name="Collage Digital Extra" data-price="80000" data-desc="Collage visual con productos o imágenes de marca.">
+    <h3>➕ Collage Digital Extra</h3>
+    <p class="overline-price">$80.000 COP / $22 USD</p>
+    <div class="overline-actions">
+      <button class="overline-btn-add" onclick="addService('Collage Digital Extra',80000)">Agregar</button>
+      <button class="overline-btn-info" onclick="showInfo(this)">ℹ️</button>
+    </div>
+  </div>
+
+  <div class="overline-card" data-category="extras" data-name="Formato Adicional" data-price="40000" data-desc="Adaptación de diseño a formato adicional por red social.">
+    <h3>➕ Formato Adicional</h3>
+    <p class="overline-price">$40.000 COP / $11 USD</p>
+    <div class="overline-actions">
+      <button class="overline-btn-add" onclick="addService('Formato Adicional',40000)">Agregar</button>
+      <button class="overline-btn-info" onclick="showInfo(this)">ℹ️</button>
+    </div>
+  </div>
+
+  <div class="overline-card" data-category="extras" data-name="Catálogo PDF / Portafolio Digital" data-price="250000" data-desc="Diseño de catálogo visual en PDF o formato digital personalizado.">
+    <h3>➕ Catálogo PDF / Portafolio Digital</h3>
+    <p class="overline-price">$250.000 COP / $68 USD</p>
+    <div class="overline-actions">
+      <button class="overline-btn-add" onclick="addService('Catálogo PDF / Portafolio Digital',250000)">Agregar</button>
+      <button class="overline-btn-info" onclick="showInfo(this)">ℹ️</button>
+    </div>
+  </div>
+
+</div>
+</div> <!-- cierre del grid -->
+
+
+  <!-- Botón del carrito -->
+  <div id="overline-cart-button" onclick="openCart()">
+    🛒 <span id="overline-cart-count">0</span>
+  </div>
+</section>
+
+<!-- Popup del carrito -->
+<div id="overline-cart-modal" class="overline-cart-modal">
+  <div class="overline-cart-content">
+    <div class="overline-cart-header">
+      <h3>Tu paquete</h3>
+      <span class="overline-cart-close" onclick="closeCart()">&times;</span>
+    </div>
+    <ul id="overline-cart-items"></ul>
+    <div class="overline-cart-summary">
+      <p id="overline-discount"></p>
+      <p id="overline-total"></p>
+      <button onclick="clearCart()">Vaciar carrito</button>
+    </div>
+
+    <!-- Formulario de datos -->
+    <div class="overline-cart-form">
+      <label>Nombre completo</label>
+      <input type="text" id="overline-name" placeholder="Tu nombre">
+
+      <label>Contacto (email o teléfono)</label>
+      <input type="text" id="overline-contact" placeholder="Tu contacto">
+
+      <label>Negocio / Empresa</label>
+      <input type="text" id="overline-business" placeholder="Nombre del negocio">
+
+      <label>Interés principal</label>
+      <input type="text" id="overline-interest" placeholder="Ej: redes sociales, branding...">
+
+      <label>Nota adicional</label>
+      <textarea id="overline-note" placeholder="Escribe aquí tus comentarios"></textarea>
+    </div>
+<p class="iva">*precios sin iva incluido</p>
+    <button class="overline-btn-quote" onclick="sendQuote()">Cotizar</button>
+  </div>
+</div>
+
+<!-- Modal de info -->
+<div id="overline-info-modal" class="overline-modal">
+  <div class="overline-modal-content">
+    <span class="overline-close" onclick="closeInfo()">&times;</span>
+    <h3 id="overline-info-title"></h3>
+    <p id="overline-info-desc"></p>
+  </div>
+</div>
+	
+<!-------------------------------- modelos -------------------------------->
+<section id="portafolio-modelos">
+  <h2 class="overline-title">Portafolio de Modelos</h2>
+  <div class="carousel-modelos">
+
+    <!-- Tarjeta de modelo -->
+    <div class="modelo-card">
+      <div class="modelo-layout">
+        
+        <!-- Columna izquierda -->
+        <div class="modelo-left">
+          <h3 class="modelo-nombre">Diana</h3>
+          <h4 class="modelo-apellido">Maciaz</h4>
+          <p><strong>Edad:</strong> 28 años</p>
+          <p><strong>Estatura:</strong> 1.70 m</p>
+
+          <div class="modelo-main">
+            <img src="diana-main.png" alt="Diana Maciaz foto principal">
+          </div>
+
+          <div class="modelo-tarifas">
+            <p><strong>Tarifas</strong></p>
+            <p><b>Medio día:</b> $200.000 COP</p>
+            <p><b>Día completo:</b> $250.000 COP</p>
+            <p class="ivaa">*Precios sin IVA incluido</p>
+          </div>
+        </div>
+
+        <!-- Columna derecha: fotos pequeñas -->
+        <div class="modelo-right">
+          <img src="diana1.png" alt="Diana foto 1">
+          <img src="diana2.png" alt="Diana foto 2">
+          <img src="diana3.png" alt="Diana foto 3">
+        </div>
+
+      </div>
+    </div>
+    <div class="modelo-card">
+      <div class="modelo-layout">
+        
+        <!-- Columna izquierda -->
+        <div class="modelo-left">
+          <h3 class="modelo-nombre">Mayra</h3>
+          <h4 class="modelo-apellido">Acosta</h4>
+          <p><strong>Edad:</strong> 19 años</p>
+          <p><strong>Estatura:</strong> 1.68 m</p>
+
+          <div class="modelo-main">
+            <img src="Mayra-main.png" alt="Mayra foto principal">
+          </div>
+
+          <div class="modelo-tarifas">
+            <p><strong>Tarifas</strong></p>
+            <p><b>Medio día:</b> $150.000 COP</p>
+            <p><b>Día completo:</b> $200.000 COP</p>
+            <p class="ivaa">*Precios sin IVA incluido</p>
+          </div>
+        </div>
+
+        <!-- Columna derecha: fotos pequeñas -->
+        <div class="modelo-right">
+          <img src="Mayra1.png" alt="Karen foto 1">
+          <img src="Mayra2.png" alt="Karen foto 2">
+          <img src="Mayra3.png" alt="Karen foto 3">
+        </div>
+
+      </div>
+    </div>
+    <div class="modelo-card">
+      <div class="modelo-layout">
+        
+        <!-- Columna izquierda -->
+        <div class="modelo-left">
+          <h3 class="modelo-nombre">Karen</h3>
+          <h4 class="modelo-apellido">Natalya</h4>
+          <p><strong>Edad:</strong> 19 años</p>
+          <p><strong>Estatura:</strong> 1.60 m</p>
+
+          <div class="modelo-main">
+            <img src="Karen-main.png" alt="Karen foto principal">
+          </div>
+
+          <div class="modelo-tarifas">
+            <p><strong>Tarifas</strong></p>
+            <p><b>Medio día:</b> $80.000 COP</p>
+            <p><b>Día completo:</b> $150.000 COP</p>
+            <p class="ivaa">*Precios sin IVA incluido</p>
+          </div>
+        </div>
+
+        <!-- Columna derecha: fotos pequeñas -->
+        <div class="modelo-right">
+          <img src="Karen1.png" alt="Karen foto 1">
+          <img src="Karen2.png" alt="Karen foto 2">
+          <img src="Karen3.png" alt="Karen foto 3">
+        </div>
+
+      </div>
+    </div>
+    <div class="modelo-card">
+      <div class="modelo-layout">
+        
+        <!-- Columna izquierda -->
+        <div class="modelo-left">
+          <h3 class="modelo-nombre">Dilan</h3>
+          <h4 class="modelo-apellido">Marín</h4>
+          <p><strong>Edad:</strong> 26 años</p>
+          <p><strong>Estatura:</strong> 1.80 m</p>
+
+          <div class="modelo-main">
+            <img src="Dilan-main.png" alt="Dilan foto principal">
+          </div>
+
+          <div class="modelo-tarifas">
+            <p><strong>Tarifas</strong></p>
+            <p><b>Medio día:</b> $150.000 COP</p>
+            <p><b>Día completo:</b> $200.000 COP</p>
+            <p class="ivaa">*Precios sin IVA incluido</p>
+          </div>
+        </div>
+
+        <!-- Columna derecha: fotos pequeñas -->
+        <div class="modelo-right">
+          <img src="Dilan1.png" alt="Dilan foto 1">
+          <img src="Dilan2.png" alt="Dilan foto 2">
+          <img src="Dilan3.png" alt="Dilan foto 3">
+        </div>
+
+      </div>
+    </div>
+    <div class="modelo-card">
+      <div class="modelo-layout">
+        
+        <!-- Columna izquierda -->
+        <div class="modelo-left">
+          <h3 class="modelo-nombre">Susan</h3>
+          <h4 class="modelo-apellido">Quitian</h4>
+          <p><strong>Edad:</strong> 26 años</p>
+          <p><strong>Estatura:</strong> 1.58 m</p>
+
+          <div class="modelo-main">
+            <img src="Susan-main.png" alt="Susan foto principal">
+          </div>
+
+          <div class="modelo-tarifas">
+            <p><strong>Tarifas</strong></p>
+            <p><b>Medio día:</b> $80.000 COP</p>
+            <p><b>Día completo:</b> $150.000 COP</p>
+            <p class="ivaa">*Precios sin IVA incluido</p>
+          </div>
+        </div>
+
+        <!-- Columna derecha: fotos pequeñas -->
+        <div class="modelo-right">
+          <img src="Susan1.png" alt="Susan foto 1">
+          <img src="Susan2.png" alt="Susan foto 2">
+          <img src="Susan3.png" alt="Susan foto 3">
+        </div>
+
+      </div>
+    </div>
+    <div class="modelo-card">
+      <div class="modelo-layout">
+        
+        <!-- Columna izquierda -->
+        <div class="modelo-left">
+          <h3 class="modelo-nombre">Allisom</h3>
+          <h4 class="modelo-apellido">Rodríguez</h4>
+          <p><strong>Edad:</strong> 27 años</p>
+          <p><strong>Estatura:</strong> 1.57 m</p>
+
+          <div class="modelo-main">
+            <img src="Allisom-main.png" alt="Allisom foto principal">
+          </div>
+
+          <div class="modelo-tarifas">
+            <p><strong>Tarifas</strong></p>
+            <p><b>Medio día:</b> $100.000 COP</p>
+            <p><b>Día completo:</b> $200.000 COP</p>
+            <p class="ivaa">*Precios sin IVA incluido</p>
+          </div>
+        </div>
+
+        <!-- Columna derecha: fotos pequeñas -->
+        <div class="modelo-right">
+          <img src="Allisom1.png" alt="Allisom foto 1">
+          <img src="Allisom2.png" alt="Allisom foto 2">
+          <img src="Allisom3.png" alt="Allisom foto 3">
+        </div>
+
+      </div>
+    </div>
+<div class="modelo-card invitacion-card">
+  <div class="invitacion-layout">
+    <h3 class="invitacion-titulo">¿Quieres ser parte de nuestro portafolio?</h3>
+    <p>Envíanos tu <strong>nombre</strong>, <strong>edad</strong>, <strong>estatura</strong>, <strong>tarifas</strong> y <strong>fotos</strong>.</p>
+    <a href="https://wa.me/573001112233" target="_blank" class="btn-wsp">
+      Enviar por WhatsApp
+    </a>
+  </div>
+</div>
+
+  </div>
+
+  <!-- Botones de navegación -->
+  <div class="carousel-controls">
+    <button class="btn-carousel" onclick="scrollModelos('prev')">⟵ Anterior</button>
+    <button class="btn-carousel" onclick="scrollModelos('next')">Siguiente ⟶</button>
+  </div>
+</section>
+
+
+
+<!-------------------------------- redes -------------------------------->
+	
+<h1 class="redesSociais" id="contacto">Redes Sociais</h1>
+  <ul class="redesSociais">
+            <li class="pinterest"><a href="https://wa.me/573018282771" target="_blank"><img src="whatsapp-icon.png" alt=""/></a></li>
+            <li class="facebook"><a href="https://www.facebook.com/share/16WUbAvNFM/" target="_blank"><img src="facebook-icon.png" alt="" /></a></li>
+            <li class="twitter"><a href="https://www.tiktok.com/@overline.agencia?_r=1&_t=ZS-93oXS0Mkwa5" target="_blank"><img src="tiktok-icon.png" alt="" /></a></li>
+            <li class="googleplus"><a href="https://www.instagram.com/overline_agencia_grafica?igsh=MXYzbmZva2Ntc201aw==" target="_blank"><img src="instagram-icon.png" alt="" /></a></li>
+            <li class="skype"><a href="mailto:overlineagenciagrafica@gmail.com" target="_blank"><img src="email-icon.png" alt="" /></a></li>
+          </ul>
+<!-------------------------------- footer -------------------------------->
+<footer>
+  <div class="footer-container">
+    <!-- Términos y condiciones -->
+    <div class="footer-terms">
+      <a href="https://overline-terminos-y-condiciones.vercel.app/" target="_blank">
+        Términos y Condiciones
+      </a>
+    </div>
+
+    <!-- Redes sociales -->
+    <div class="footer-social">
+    <a href="https://wa.me/573018282771" target="_blank"><img style="width: 40px;" src="whatsapp-icon.png" alt=""/></a>
+    <a href="https://www.facebook.com/share/16WUbAvNFM/" target="_blank"><img style="width: 40px;" src="facebook-icon.png" alt="" /></a>
+    <a href="https://www.tiktok.com/@overline.agencia?_r=1&_t=ZS-93oXS0Mkwa5" target="_blank"><img style="width: 40px;" src="tiktok-icon.png" alt="" /></a>
+	<a href="https://www.instagram.com/overline_agencia_grafica?igsh=MXYzbmZva2Ntc201aw==" target="_blank"><img style="width: 40px;" src="instagram-icon.png" alt="" /></a>
+	<a href="mailto:overlineagenciagrafica@gmail.com" target="_blank"><img style="width: 40px;" src="email-icon.png" alt="" /></a>
+    </div>
+  </div>
+  <p class="footer-copy">© 2026 OVERLINE Agencia Gráfica. Todos los derechos reservados.</p>
+</footer>
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script>
+    gsap.registerPlugin(ScrollTrigger);
+
+
+    // Detectar resolución
+    function getSuffixByDevice() {
+      const w = window.innerWidth;
+      if (w < 768) return "-MOBILE";
+      return "-desktop";
+    }
+    const suffix = getSuffixByDevice();
+
+    // Sección 1: Scroll video
+    function crearSeccion(canvasId, startIndex, endIndex) {
+      const frameCount = endIndex - startIndex + 1;
+      const images = [];
+      const canvas = document.getElementById(canvasId);
+      const context = canvas.getContext("2d");
+
+      function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        render();
+      }
+      window.addEventListener("resize", resizeCanvas);
+
+      for (let i = startIndex; i <= endIndex; i++) {
+        const img = new Image();
+        img.src = `${i}${suffix}.webp`;
+        images.push(img);
+      }
+
+      const obj = { frame: 0 };
+
+      gsap.to(obj, {
+        frame: frameCount - 1,
+        snap: "frame",
+        ease: "none",
+        scrollTrigger: {
+          trigger: canvas.parentElement,
+          start: "top top",
+          end: `+=${frameCount * 120}`,
+          scrub: true,
+          pin: true
+        },
+        onUpdate: render
+      });
+
+      function render() {
+        if (images[obj.frame]) {
+          context.clearRect(0, 0, canvas.width, canvas.height);
+          context.drawImage(images[obj.frame], 0, 0, canvas.width, canvas.height);
+        }
+      }
+
+      images[0].onload = () => {
+        resizeCanvas();
+        render();
+      };
+    }
+
+    // Sección 1: 90 imágenes
+    crearSeccion("canvas1", 1, 11);
+
+// Abrir popup
+function openPopup(id) {
+  const popup = document.getElementById(id);
+  popup.style.display = 'block';
+  gsap.to(popup.querySelector('.popup-ig-content'), { 
+    scale: 1, opacity: 1, duration: 0.4, ease: "power2.out" 
+  });
+}
+
+// Cerrar con clic fuera o botón
+document.querySelectorAll('.popup-ig').forEach(popup => {
+  popup.addEventListener('click', e => {
+    if (e.target.classList.contains('popup-ig')) {
+      gsap.to(popup.querySelector('.popup-ig-content'), { 
+        scale: 0.8, opacity: 0, duration: 0.3, ease: "power2.in",
+        onComplete: () => popup.style.display = 'none'
+      });
+    }
+  });
+});
+
+// Cerrar con ESC
+document.addEventListener('keydown', e => {
+  if (e.key === "Escape") {
+    document.querySelectorAll('.popup-ig').forEach(popup => {
+      if (popup.style.display === 'block') {
+        gsap.to(popup.querySelector('.popup-ig-content'), { 
+          scale: 0.8, opacity: 0, duration: 0.3, ease: "power2.in",
+          onComplete: () => popup.style.display = 'none'
+        });
+      }
+    });
+  }
+});
+
+// Animación inicial de las cartas
+gsap.utils.toArray('.card').forEach((card, i) => {
+  gsap.to(card, { 
+    opacity: 1, scale: 1, duration: 0.6, delay: i * 0.2, ease: "power2.out" 
+  });
+});
+function toggleMenu() {
+    document.getElementById('menuLateral').classList.toggle('active');
+}
+
+// Función para manejar hover y click en los íconos
+document.querySelectorAll('.menu-lateral a').forEach(link => {
+    const img = link.querySelector('img');
+    const tooltip = link.querySelector('.tooltip');
+    const staticSrc = img.src;
+    const gifSrc = img.getAttribute('data-gif');
+
+    // Hover: cambia a GIF y muestra tooltip
+    link.addEventListener('mouseover', () => {
+        img.src = gifSrc;
+        tooltip.style.opacity = 1;
+        setTimeout(() => tooltip.style.opacity = 0, 500); // 0.5s
+    });
+
+    // Mouseout: vuelve a PNG
+    link.addEventListener('mouseout', () => {
+        img.src = staticSrc;
+    });
+
+    // Click: cambia a GIF y muestra tooltip
+    link.addEventListener('click', () => {
+        img.src = gifSrc;
+        tooltip.style.opacity = 1;
+        setTimeout(() => tooltip.style.opacity = 0, 500); // oculta tooltip
+        setTimeout(() => img.src = staticSrc, 1000); // vuelve a PNG después de 1s
+
+        // En móvil, cerrar menú al hacer clic
+        if (window.innerWidth <= 767) {
+            document.getElementById('menuLateral').classList.remove('active');
+        }
+    });
+});
+
+let overlineCart = [];
+
+// Agregar servicio al carrito (con cantidad)
+function addService(name, price){
+  let existing = overlineCart.find(item => item.name === name);
+  if(existing){
+    existing.quantity += 1;
+  } else {
+    overlineCart.push({name, price, quantity:1});
+  }
+  document.getElementById('overline-cart-count').innerText = getCartCount();
+  renderCart();
+}
+
+// Contador total
+function getCartCount(){
+  return overlineCart.reduce((sum,item)=>sum+item.quantity,0);
+}
+
+// Renderizar carrito con botones de acción
+function renderCart(){
+  let list = document.getElementById('overline-cart-items');
+  list.innerHTML = "";
+  let total = 0;
+
+  overlineCart.forEach((item,index)=>{
+    total += item.price * item.quantity;
+    list.innerHTML += `
+      <li>
+        ${item.name} 
+        <span style="float:right;">
+          $${item.price} x ${item.quantity}
+          <button class="increase" onclick="increaseItem(${index})">+</button>
+          <button class="decrease" onclick="decreaseItem(${index})">-</button>
+          <button class="remove" onclick="removeItem(${index})">🗑️</button>
+        </span>
+      </li>`;
+  });
+
+  // Descuentos progresivos
+  let discount = 0;
+  if(getCartCount() >= 20) discount = 0.20;
+  else if(getCartCount() >= 10) discount = 0.15;
+  else if(getCartCount() >= 5) discount = 0.10;
+
+  let finalTotal = total - (total * discount);
+  document.getElementById('overline-discount').innerText = discount > 0 ? `Descuento aplicado: ${discount*100}%` : "";
+  document.getElementById('overline-total').innerText = `Total: $${finalTotal} COP`;
+}
+
+// Aumentar cantidad
+function increaseItem(index){
+  overlineCart[index].quantity += 1;
+  document.getElementById('overline-cart-count').innerText = getCartCount();
+  renderCart();
+}
+
+// Disminuir cantidad
+function decreaseItem(index){
+  if(overlineCart[index].quantity > 1){
+    overlineCart[index].quantity -= 1;
+  } else {
+    overlineCart.splice(index,1);
+  }
+  document.getElementById('overline-cart-count').innerText = getCartCount();
+  renderCart();
+}
+
+// Quitar ítem
+function removeItem(index){
+  overlineCart.splice(index,1);
+  document.getElementById('overline-cart-count').innerText = getCartCount();
+  renderCart();
+}
+
+// Limpiar carrito completo
+function clearCart(){
+  overlineCart = [];
+  document.getElementById('overline-cart-count').innerText = 0;
+  renderCart();
+}
+
+// Abrir y cerrar carrito
+function openCart(){
+  document.getElementById('overline-cart-modal').style.display = "block";
+}
+function closeCart(){
+  document.getElementById('overline-cart-modal').style.display = "none";
+}
+
+// Cerrar carrito al hacer clic fuera
+window.addEventListener('click', function(e){
+  const modal = document.getElementById('overline-cart-modal');
+  const content = document.querySelector('.overline-cart-content');
+  const button = document.getElementById('overline-cart-button');
+
+  // Si el modal está abierto y el clic fue en el fondo (modal), no dentro del contenido
+  if(modal.style.display === "block" && e.target === modal){
+    closeCart();
+  }
+});
+
+
+// Cerrar carrito con ESC
+window.addEventListener('keydown', function(e){
+  if(e.key === "Escape"){
+    closeCart();
+    document.getElementById('overline-info-modal').style.display = "none";
+  }
+});
+
+// Enviar cotización a Google Sheets vía Apps Script
+function sendQuote(){
+  const payload = {
+    name: document.getElementById('overline-name').value,
+    contact: document.getElementById('overline-contact').value,
+    business: document.getElementById('overline-business').value,
+    interest: document.getElementById('overline-interest').value,
+    note: document.getElementById('overline-note').value,
+    items: overlineCart.map(i => `${i.name} x${i.quantity}`).join(", "),
+    total: document.getElementById('overline-total').innerText
+  };
+
+  fetch("https://script.google.com/macros/s/AKfycbw2kumYMibD5ky1pBwP36kkCIXDTKrlvjY-OvP100yT-hY_M11rpnfsmTF6GzJ9jbNneA/exec", { method: "POST", body: JSON.stringify(payload) })
+  .then(res => res.text())
+  .then(text => {
+    alert("Cotización enviada a Google Sheets ✅");
+    clearCart();
+    closeCart();
+  })
+  .catch(err => alert("Error al enviar: " + err));
+}
+
+// Modal info
+function showInfo(btn){
+  let card = btn.closest('.overline-card');
+  document.getElementById('overline-info-title').innerText = card.getAttribute('data-name');
+  document.getElementById('overline-info-desc').innerText = card.getAttribute('data-desc');
+  document.getElementById('overline-info-modal').style.display = "block";
+}
+function closeInfo(){
+  document.getElementById('overline-info-modal').style.display = "none";
+}
+
+// Filtros por categoría
+function filterServices(category){
+  const cards = document.querySelectorAll('.overline-card');
+  cards.forEach(card=>{
+    if(category === 'all' || card.getAttribute('data-category') === category){
+      card.style.display = 'block';
+    } else {
+      card.style.display = 'none';
+    }
+  });
+}
+
+// Ordenar por precio
+function sortServices(order = 'asc'){
+  const grid = document.querySelector('.overline-services-grid');
+  const cards = Array.from(grid.querySelectorAll('.overline-card'));
+
+  cards.sort((a,b)=>{
+    const priceA = parseInt(a.getAttribute('data-price'));
+    const priceB = parseInt(b.getAttribute('data-price'));
+    return order === 'asc' ? priceA - priceB : priceB - priceA;
+  });
+
+  cards.forEach(card => grid.appendChild(card));
+}
+ // Abrir popup
+  document.querySelectorAll('.boton-leer-unico').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const target = btn.getAttribute('data-target');
+      document.getElementById(target).style.display = 'block';
+    });
+  });
+
+  // Cerrar popup
+  document.querySelectorAll('.cerrar-popup-unico').forEach(closeBtn => {
+    closeBtn.addEventListener('click', () => {
+      closeBtn.closest('.popup-unico').style.display = 'none';
+    });
+  });
+
+  // Cerrar al hacer clic fuera
+  window.addEventListener('click', e => {
+    if (e.target.classList.contains('popup-unico')) {
+      e.target.style.display = 'none';
+    }
+  });
+
+  // Cerrar con tecla ESC
+  window.addEventListener('keydown', e => {
+    if (e.key === "Escape") {
+      document.querySelectorAll('.popup-unico').forEach(p => p.style.display = 'none');
+    }
+  });
+	  
+	  
+	  // Abrir popup
+  document.querySelectorAll('.blog-card').forEach(card => {
+    card.addEventListener('click', () => {
+      const popupId = card.getAttribute('data-popup');
+      document.getElementById(popupId).classList.add('active');
+    });
+  });
+
+  // Cerrar popup con la X
+  document.querySelectorAll('.closes').forEach(btn => {
+    btn.addEventListener('click', () => {
+      btn.closest('.popupa').classList.remove('active');
+    });
+  });
+
+  // Cerrar popup al hacer clic fuera del contenido
+  document.querySelectorAll('.popupa').forEach(popup => {
+    popup.addEventListener('click', e => {
+      if (e.target === popup) {
+        popup.classList.remove('active');
+      }
+    });
+  });
+	  
+	  // ===== POPUP PRINCIPAL =====
+const btnTerminos = document.querySelector(".btn-terminix");
+const popupTerminos = document.getElementById("popupa-terminix");
+const cerrarTerminos = document.querySelector(".cerrar-terminix");
+
+// Abrir popup principal
+btnTerminos.addEventListener("click", () => {
+  popupTerminos.style.display = "block";
+});
+
+// Cerrar popup principal
+cerrarTerminos.addEventListener("click", () => {
+  popupTerminos.style.display = "none";
+});
+
+// Cerrar popup principal al hacer click fuera del contenido
+window.addEventListener("click", (e) => {
+  if (e.target === popupTerminos) {
+    popupTerminos.style.display = "none";
+  }
+});
+
+// ===== SUBPOPUPS =====
+const subpopupBtns = document.querySelectorAll(".subpopupa-btn");
+const cerrarSubpopups = document.querySelectorAll(".cerrar-subpopupa");
+
+// Abrir subpopup correspondiente
+subpopupBtns.forEach(btn => {
+  btn.addEventListener("click", () => {
+    const targetId = btn.dataset.target;
+    const subpopup = document.getElementById(targetId);
+    if (subpopup) {
+      subpopup.style.display = "block";
+    }
+  });
+});
+
+// Cerrar subpopup con botón
+cerrarSubpopups.forEach(btn => {
+  btn.addEventListener("click", () => {
+    btn.closest(".subpopupa").style.display = "none";
+  });
+});
+
+// Cerrar subpopup al hacer click fuera del contenido
+window.addEventListener("click", (e) => {
+  if (e.target.classList.contains("subpopupa")) {
+    e.target.style.display = "none";
+  }
+});
+	  
+// Abrir sección al hacer clic en el enlace
+document.querySelector(".link-terminos").addEventListener("click", (e) => {
+  e.preventDefault(); // Evita que navegue
+  document.getElementById("terminos-raros").style.display = "block";
+});
+
+// Cerrar sección con la X
+document.querySelector(".cerrar-raros").addEventListener("click", () => {
+  document.getElementById("terminos-raros").style.display = "none";
+});
+
+// Cerrar sección al hacer clic fuera del contenido
+window.addEventListener("click", (e) => {
+  if (e.target.id === "terminos-raros") {
+    e.target.style.display = "none";
+  }
+});
+
+// modelo------------------------------------------------------
+
+function scrollModelos(direction) {
+  const carousel = document.querySelector(".carousel-modelos");
+  const card = document.querySelector(".modelo-card");
+  const cardWidth = card.offsetWidth + 30; // ancho + gap
+
+  carousel.scrollBy({
+    left: direction === 'next' ? cardWidth : -cardWidth,
+    behavior: 'smooth'
+  });
+}
+
+
+// redes------------------------------------------------------
+
+// modelo------------------------------------------------------
+
+  </script>
+</body>
+</html>
+
+
+	
