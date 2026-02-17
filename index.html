@@ -3175,19 +3175,36 @@ if (item.type === "video") {
   });
 
   modal.classList.add("active");
+document.body.style.overflow = "hidden";
+
+// 👉 Agrega esto
+history.pushState({ modalOpen: true }, "");
+
 
 });
 
 
   closeModalBtn.addEventListener("click", () => {
-    modal.classList.remove("active");
-  });
+  modal.classList.remove("active");
+  document.body.style.overflow = "";
+
+  if (history.state && history.state.modalOpen) {
+    history.back();
+  }
+});
+
 
   modal.addEventListener("click", (e) => {
-    if (e.target === modal) {
-      modal.classList.remove("active");
+  if (e.target === modal) {
+    modal.classList.remove("active");
+    document.body.style.overflow = "";
+
+    if (history.state && history.state.modalOpen) {
+      history.back();
     }
-  });
+  }
+});
+
 
   updateInfo(0);
 
@@ -3206,6 +3223,8 @@ if (item.type === "video") {
       if(popup){
         popup.classList.add("active");
         document.body.style.overflow = "hidden";
+		  history.pushState({ modalOpen: true }, "");
+
       }
 
     });
@@ -3214,18 +3233,30 @@ if (item.type === "video") {
   // Cerrar con X
   document.querySelectorAll(".odcModels-close").forEach(function(btn){
     btn.addEventListener("click", function(){
-      this.closest(".odcModels-popup").classList.remove("active");
-      document.body.style.overflow = "auto";
-    });
+
+  this.closest(".odcModels-popup").classList.remove("active");
+  document.body.style.overflow = "";
+
+  if (history.state && history.state.modalOpen) {
+    history.back();
+  }
+
+});
+
   });
 
   // Cerrar haciendo click fuera
   document.querySelectorAll(".odcModels-popup").forEach(function(popup){
     popup.addEventListener("click", function(e){
       if(e.target === this){
-        this.classList.remove("active");
-        document.body.style.overflow = "auto";
-      }
+  this.classList.remove("active");
+  document.body.style.overflow = "";
+
+  if (history.state && history.state.modalOpen) {
+    history.back();
+  }
+}
+
     });
   });
 
@@ -3286,6 +3317,26 @@ mainTitle.addEventListener("click", () => {
 //footer=======================================================================================
 	
 document.getElementById("year").textContent = new Date().getFullYear();
+
+/******************************/
+/* CERRAR MODALS CON BOTÓN BACK */
+/******************************/
+
+window.addEventListener("popstate", function () {
+
+  // Cerrar modal principal
+  const projectModal = document.getElementById("projectModal");
+  if (projectModal && projectModal.classList.contains("active")) {
+    projectModal.classList.remove("active");
+  }
+
+  // Cerrar popups de modelos
+  document.querySelectorAll(".odcModels-popup.active").forEach(popup => {
+    popup.classList.remove("active");
+  });
+
+  document.body.style.overflow = "";
+});
 
 
 </script>
