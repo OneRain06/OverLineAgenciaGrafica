@@ -404,57 +404,171 @@ nav{
   transform: translateY(-2px);
 }
 
-/* ================= MODAL ================= */
+/* ================= MODAL PREMIUM ================= */
 
 .project-modal {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0,0,0,0.85);
-  display: none;
+  inset: 0;
+  background: rgba(5,5,10,0.85);
+  backdrop-filter: blur(20px);
+  display: flex;
   align-items: center;
   justify-content: center;
   z-index: 999;
-  padding: 40px;
+  padding: 60px;
+  opacity: 0;
+  visibility: hidden;
+  transition: 0.4s ease;
 }
 
 .project-modal.active {
-  display: flex;
+  opacity: 1;
+  visibility: visible;
 }
 
 .modal-content {
-  background: #111;
-  max-width: 900px;
+  background: linear-gradient(145deg, #111, #0c0c0f);
   width: 100%;
-  padding: 40px;
-  border-radius: 20px;
-  color: white;
+  max-width: 1100px;
+  border-radius: 25px;
+  padding: 60px;
   position: relative;
-  max-height: 90vh;
-  overflow-y: auto;
+  transform: translateY(40px) scale(0.95);
+  transition: 0.5s cubic-bezier(.22,1,.36,1);
+  box-shadow: 0 60px 140px rgba(0,0,0,0.8);
 }
+
+.project-modal.active .modal-content {
+  transform: translateY(0) scale(1);
+}
+
+/* CLOSE BUTTON */
 
 .close-modal {
   position: absolute;
-  top: 20px;
-  right: 25px;
-  font-size: 28px;
+  top: 25px;
+  right: 30px;
+  font-size: 20px;
   cursor: pointer;
+  background: rgba(255,255,255,0.08);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.3s ease;
 }
 
-.modal-gallery {
-  margin-top: 30px;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 20px;
+.close-modal:hover {
+  background: #0088ff;
+  transform: rotate(90deg);
 }
 
-.modal-gallery img,
-.modal-gallery video {
+/* HEADER */
+
+.modal-header {
+  max-width: 700px;
+  margin-bottom: 50px;
+  animation: fadeUp 0.8s ease forwards;
+}
+
+.modal-tag {
+  font-size: 11px;
+  letter-spacing: 3px;
+  color: #0088ff;
+  margin-bottom: 20px;
+}
+
+.modal-header h2 {
+  font-size: 2.3rem;
+  margin-bottom: 15px;
+}
+
+.modal-header p {
+  opacity: 0.7;
+  line-height: 1.7;
+}
+
+/* MEDIA AREA */
+
+.modal-media {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.modal-main-media img,
+.modal-main-media video {
   width: 100%;
-  border-radius: 12px;
+  border-radius: 18px;
+  animation: fadeIn 0.6s ease;
+}
+
+.modal-thumbnails {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.modal-thumbnails img,
+.modal-thumbnails video {
+  width: 120px;
+  height: 90px;
+  object-fit: cover;
+  border-radius: 10px;
+  cursor: pointer;
+  opacity: 0.6;
+  transition: 0.3s ease;
+}
+
+.modal-thumbnails img:hover,
+.modal-thumbnails video:hover {
+  opacity: 1;
+  transform: scale(1.05);
+}
+
+.modal-thumbnails .active-thumb {
+  opacity: 1;
+  border: 2px solid #0088ff;
+}
+
+/* ANIMATIONS */
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* RESPONSIVE */
+
+@media(max-width: 900px){
+
+  .modal-content {
+    padding: 35px;
+  }
+
+  .modal-header h2 {
+    font-size: 1.6rem;
+  }
+
 }
 
 
@@ -513,6 +627,8 @@ nav{
 }
 
 .odcModels-card-info {
+
+
 
   padding: 15px;
 }
@@ -1015,6 +1131,7 @@ nav{
 }
 
 .odcModels-cta-btn {
+
   display: inline-block;
   padding: 12px 20px;
   background: #25D366;
@@ -1297,7 +1414,119 @@ nav{
   font-size: 14px;
 }
 
-/*like=====================================================================*/
+/*================================== SERVICES SECTION ================================== */
+
+.services-section {
+  min-height: 100vh;
+  background: #0a0a0d;
+  padding: 120px 5%;
+  color: white;
+  display: flex;
+  align-items: center;
+}
+
+.services-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: auto;
+}
+
+.services-header {
+  max-width: 700px;
+  margin-bottom: 70px;
+}
+
+.services-tag {
+  font-size: 12px;
+  letter-spacing: 3px;
+  color: #0088ff;
+}
+
+.services-header h2 {
+  font-size: 2.5rem;
+  margin: 20px 0;
+}
+
+.services-header p {
+  opacity: 0.7;
+  line-height: 1.7;
+}
+
+/* GRID */
+
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 40px;
+}
+
+.service-card {
+  background: linear-gradient(145deg, #111, #0f0f14);
+  padding: 35px;
+  border-radius: 20px;
+  transition: 0.4s cubic-bezier(.22,1,.36,1);
+  border: 1px solid rgba(255,255,255,0.05);
+}
+
+.service-card:hover {
+  transform: translateY(-10px);
+  border: 1px solid #0088ff;
+  box-shadow: 0 20px 60px rgba(0,136,255,0.2);
+}
+
+.service-icon {
+  font-size: 28px;
+  margin-bottom: 20px;
+}
+
+.service-card h3 {
+  margin-bottom: 15px;
+}
+
+.service-card p {
+  opacity: 0.7;
+  line-height: 1.6;
+}
+
+/* CTA */
+
+.services-cta {
+  margin-top: 70px;
+  text-align: center;
+}
+
+.marketplace-btn {
+  display: inline-block;
+  padding: 15px 35px;
+  background: #0088ff;
+  color: white;
+  border-radius: 40px;
+  font-weight: bold;
+  text-decoration: none;
+  transition: 0.3s ease;
+  font-size: 16px;
+}
+
+.marketplace-btn:hover {
+  background: #ff2a2a;
+  transform: translateY(-3px);
+  box-shadow: 0 10px 30px rgba(255,42,42,0.3);
+}
+
+/* RESPONSIVE */
+
+@media(max-width: 900px) {
+
+  .services-header h2 {
+    font-size: 1.8rem;
+  }
+
+  .services-section {
+    padding: 80px 5%;
+  }
+
+}
+
 </style>
 </head>
 
@@ -1446,16 +1675,26 @@ nav{
 
   <div class="modal-content">
 
-    <span class="close-modal" id="closeModal">&times;</span>
+    <span class="close-modal" id="closeModal">✕</span>
 
-    <h2 id="modalTitle"></h2>
-    <p id="modalDescription"></p>
+    <div class="modal-header">
+      <div class="modal-tag">CASE STUDY</div>
+      <h2 id="modalTitle"></h2>
+      <p id="modalDescription"></p>
+    </div>
 
-    <div class="modal-gallery" id="modalGallery"></div>
+    <div class="modal-media">
+
+      <div class="modal-main-media" id="modalMainMedia"></div>
+
+      <div class="modal-thumbnails" id="modalThumbnails"></div>
+
+    </div>
 
   </div>
 
 </div>
+
 
 <!-- ================= modelos =========================================== -->
 
@@ -1966,6 +2205,58 @@ nav{
     </div>
   </div>
 </div>
+<!-- ================= SERVICES SECTION ================= -->
+
+<section class="services-section" id="servicios">
+
+  <div class="services-container">
+
+    <div class="services-header">
+      <span class="services-tag">NUESTROS SERVICIOS</span>
+      <h2>Impulsamos marcas con estrategia, creatividad y tecnología</h2>
+      <p>
+        Ofrecemos soluciones integrales para marcas que quieren crecer,
+        posicionarse y vender más en el entorno digital.
+      </p>
+    </div>
+
+    <div class="services-grid">
+
+      <div class="service-card">
+        <div class="service-icon">🎨</div>
+        <h3>Branding & Identidad</h3>
+        <p>Desarrollo de identidad visual, manual de marca, logo y universo gráfico.</p>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">📱</div>
+        <h3>Gestión de Redes Sociales</h3>
+        <p>Estrategia, creación de contenido, diseño y optimización para redes.</p>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">🎥</div>
+        <h3>Producción Audiovisual</h3>
+        <p>Video marketing, reels, fotografía profesional y contenido premium.</p>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">🚀</div>
+        <h3>Publicidad Digital</h3>
+        <p>Campañas en Meta Ads y Google Ads enfocadas en resultados.</p>
+      </div>
+
+    </div>
+
+    <div class="services-cta">
+      <a href="https://overline-marketplace.vercel.app/" class="marketplace-btn">
+        🛒 Ver servicios y cotizar
+      </a>
+    </div>
+
+  </div>
+
+</section>
 <!-- ================= contacto =========================================== -->
 <section class="overline-contact" id="contacto">
   <div class="overline-container">
@@ -2176,9 +2467,7 @@ nav{
   </div>
   </div>
 </section>
-<section>
 
-</section>
 	
 <!-- ================= footer =========================================== -->
 <footer class="overline-footer">
@@ -2349,35 +2638,64 @@ document.addEventListener("DOMContentLoaded", function () {
 
   });
 
-  openModalBtn.addEventListener("click", () => {
+const modalMainMedia = document.getElementById("modalMainMedia");
+const modalThumbnails = document.getElementById("modalThumbnails");
 
-    const project = projectData[currentIndex];
+openModalBtn.addEventListener("click", () => {
 
-    modalTitle.textContent = project.title;
-    modalDescription.textContent = project.description;
+  const project = projectData[currentIndex];
 
-    modalGallery.innerHTML = "";
+  modalTitle.textContent = project.title;
+  modalDescription.textContent = project.description;
 
-    project.media.forEach(item => {
+  modalMainMedia.innerHTML = "";
+  modalThumbnails.innerHTML = "";
 
-      if (item.type === "img") {
-        const img = document.createElement("img");
-        img.src = item.src;
-        modalGallery.appendChild(img);
-      }
+  project.media.forEach((item, index) => {
 
-      if (item.type === "video") {
-        const video = document.createElement("video");
-        video.src = item.src;
-        video.controls = true;
-        modalGallery.appendChild(video);
-      }
+    let element;
 
+    if (item.type === "img") {
+      element = document.createElement("img");
+      element.src = item.src;
+    }
+
+    if (item.type === "video") {
+      element = document.createElement("video");
+      element.src = item.src;
+      element.controls = true;
+    }
+
+    if (index === 0) {
+      modalMainMedia.appendChild(element.cloneNode(true));
+    }
+
+    const thumb = element.cloneNode(true);
+    thumb.classList.add("thumbnail");
+
+    if (index === 0) {
+      thumb.classList.add("active-thumb");
+    }
+
+    thumb.addEventListener("click", () => {
+
+      document.querySelectorAll(".modal-thumbnails img, .modal-thumbnails video")
+        .forEach(el => el.classList.remove("active-thumb"));
+
+      thumb.classList.add("active-thumb");
+
+      modalMainMedia.innerHTML = "";
+      modalMainMedia.appendChild(element.cloneNode(true));
     });
 
-    modal.classList.add("active");
+    modalThumbnails.appendChild(thumb);
 
   });
+
+  modal.classList.add("active");
+
+});
+
 
   closeModalBtn.addEventListener("click", () => {
     modal.classList.remove("active");
