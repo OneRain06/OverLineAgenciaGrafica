@@ -513,6 +513,7 @@ nav{
 }
 
 .odcModels-card-info {
+
   padding: 15px;
 }
 
@@ -1296,7 +1297,7 @@ nav{
   font-size: 14px;
 }
 
-
+/*like=====================================================================*/
 </style>
 </head>
 
@@ -2175,6 +2176,9 @@ nav{
   </div>
   </div>
 </section>
+<section>
+
+</section>
 	
 <!-- ================= footer =========================================== -->
 <footer class="overline-footer">
@@ -2427,45 +2431,28 @@ document.addEventListener("DOMContentLoaded", function () {
 
 });
 window.addEventListener("load", function () {
-
   document.querySelectorAll(".odcModels-carousel-wrapper").forEach(function (wrapper) {
-
     const carousel = wrapper.querySelector(".odcModels-carousel");
     const nextBtn = wrapper.querySelector(".odcModels-next");
     const prevBtn = wrapper.querySelector(".odcModels-prev");
-    const cards = carousel.querySelectorAll(".odcModels-card");
-
-    let currentIndex = 0;
-
-    function goToCard(index) {
-      if (index >= 0 && index < cards.length) {
-        currentIndex = index;
-        cards[currentIndex].scrollIntoView({
-          behavior: "smooth",
-          inline: "start"
-        });
-      }
-    }
+    const cardWidth = carousel.querySelector(".odcModels-card").offsetWidth + 30; // ancho + gap
 
     if (nextBtn) {
-      nextBtn.addEventListener("click", function () {
-        if (currentIndex < cards.length - 1) {
-          goToCard(currentIndex + 1);
-        }
+      nextBtn.addEventListener("click", function (e) {
+        e.preventDefault();
+        carousel.scrollLeft += cardWidth;
       });
     }
 
     if (prevBtn) {
-      prevBtn.addEventListener("click", function () {
-        if (currentIndex > 0) {
-          goToCard(currentIndex - 1);
-        }
+      prevBtn.addEventListener("click", function (e) {
+        e.preventDefault();
+        carousel.scrollLeft -= cardWidth;
       });
     }
-
   });
-
 });
+
 
 //===============================================tyc===========================================
 	document.querySelectorAll(".term-title").forEach(button => {
