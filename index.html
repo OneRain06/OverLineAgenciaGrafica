@@ -1397,14 +1397,18 @@ nav{
 }
 
 .term-content {
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.4s ease;
+  display: none;
   color: #9aa4c4;
   font-size: 16px;
   line-height: 1.7;
   padding-right: 20px;
 }
+
+.term-content.open {
+  display: block;
+}
+
+
 
 .term-content p {
   margin-bottom: 15px;
@@ -1436,10 +1440,14 @@ nav{
 }
 
 .terms-main-content {
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.6s ease;
+  display: none;
 }
+
+.terms-main-content.open {
+  display: block;
+}
+
+
 
 
 /*footer=================================================================================*/
@@ -3286,34 +3294,30 @@ window.addEventListener("load", function () {
 
 
 //===============================================tyc===========================================
-	document.querySelectorAll(".term-title").forEach(button => {
-  button.addEventListener("click", () => {
+	// =============================================== TYC ===========================================
 
-    const content = button.nextElementSibling;
+document.querySelectorAll(".term-title").forEach(button => {
+  button.addEventListener("click", () => {
 
     button.classList.toggle("active");
 
-    if (content.style.maxHeight) {
-      content.style.maxHeight = null;
-    } else {
-      content.style.maxHeight = content.scrollHeight + "px";
-    }
+    const content = button.nextElementSibling;
+    content.classList.toggle("open");
+
   });
 });
+
 const mainTitle = document.querySelector(".terms-main-title");
 const mainContent = document.querySelector(".terms-main-content");
 
-mainTitle.addEventListener("click", () => {
+if (mainTitle) {
+  mainTitle.addEventListener("click", () => {
+    mainTitle.classList.toggle("active");
+    mainContent.classList.toggle("open");
+  });
+}
 
-  mainTitle.classList.toggle("active");
 
-  if (mainContent.style.maxHeight) {
-    mainContent.style.maxHeight = null;
-  } else {
-    mainContent.style.maxHeight = mainContent.scrollHeight + "px";
-  }
-
-});
 //footer=======================================================================================
 	
 document.getElementById("year").textContent = new Date().getFullYear();
