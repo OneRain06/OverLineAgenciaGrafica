@@ -404,7 +404,7 @@ nav{
   transform: translateY(-2px);
 }
 
-/* ================= MODAL PREMIUM ================= */
+/* ================= MODAL PREMIUM COMPLETO ================= */
 
 .project-modal {
   position: fixed;
@@ -418,7 +418,7 @@ nav{
   padding: 60px;
   opacity: 0;
   visibility: hidden;
-  transition: 0.4s ease;
+  transition: opacity 0.4s ease, visibility 0.4s ease;
 }
 
 .project-modal.active {
@@ -436,13 +436,15 @@ nav{
   transform: translateY(40px) scale(0.95);
   transition: 0.5s cubic-bezier(.22,1,.36,1);
   box-shadow: 0 60px 140px rgba(0,0,0,0.8);
+  max-height: 90vh;
+  overflow-y: auto;
 }
 
 .project-modal.active .modal-content {
   transform: translateY(0) scale(1);
 }
 
-/* CLOSE BUTTON */
+/* ================= CLOSE BUTTON ================= */
 
 .close-modal {
   position: absolute;
@@ -465,7 +467,7 @@ nav{
   transform: rotate(90deg);
 }
 
-/* HEADER */
+/* ================= HEADER ================= */
 
 .modal-header {
   max-width: 700px;
@@ -490,7 +492,33 @@ nav{
   line-height: 1.7;
 }
 
-/* MEDIA AREA */
+/* ================= LINKS ================= */
+
+.modal-links {
+  margin-top: 25px;
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.modal-links a {
+  padding: 10px 20px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 30px;
+  text-decoration: none;
+  color: white;
+  font-size: 14px;
+  transition: 0.3s ease;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+.modal-links a:hover {
+  background: #0088ff;
+  border-color: #0088ff;
+  transform: translateY(-2px);
+}
+
+/* ================= MEDIA ================= */
 
 .modal-media {
   display: flex;
@@ -500,7 +528,7 @@ nav{
 
 .modal-main-media img,
 .modal-main-media video {
-  width: 100%;
+  width: 40%;
   border-radius: 18px;
   animation: fadeIn 0.6s ease;
 }
@@ -533,7 +561,7 @@ nav{
   border: 2px solid #0088ff;
 }
 
-/* ANIMATIONS */
+/* ================= ANIMATIONS ================= */
 
 @keyframes fadeUp {
   from {
@@ -557,20 +585,103 @@ nav{
   }
 }
 
-/* RESPONSIVE */
+/* ================= RESPONSIVE MOBILE ================= */
 
-@media(max-width: 900px){
+@media (max-width: 900px) {
+
+  .project-modal {
+    padding: 0;
+    align-items: flex-end;
+  }
 
   .modal-content {
-    padding: 35px;
+    width: 100%;
+    max-width: 100%;
+    border-radius: 25px 25px 0 0;
+    padding: 30px 20px 40px;
+    max-height: 95vh;
+    transform: translateY(100%);
+  }
+
+  .project-modal.active .modal-content {
+    transform: translateY(0);
+  }
+
+  /* iOS style handle */
+  .modal-content::before {
+    content: "";
+    width: 40px;
+    height: 4px;
+    background: rgba(255,255,255,0.3);
+    border-radius: 20px;
+    display: block;
+    margin: 0 auto 20px;
+  }
+
+  .close-modal {
+    top: 15px;
+    right: 15px;
+    width: 35px;
+    height: 35px;
+    font-size: 16px;
+
+  }
+
+  .modal-header {
+    margin-bottom: 30px;
   }
 
   .modal-header h2 {
-    font-size: 1.6rem;
+    font-size: 1.4rem;
+    line-height: 1.3;
+  }
+
+  .modal-header p {
+    font-size: 14px;
+  }
+
+  .modal-tag {
+    font-size: 10px;
+    letter-spacing: 2px;
+  }
+
+  .modal-main-media img,
+  .modal-main-media video {
+  width: 90%;
+    border-radius: 14px;
+  }
+
+  .modal-thumbnails {
+    gap: 10px;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    padding-bottom: 5px;
+  }
+
+  .modal-thumbnails::-webkit-scrollbar {
+    display: none;
+  }
+
+  .modal-thumbnails img,
+  .modal-thumbnails video {
+    width: 50px;
+    height: 70px;
+    flex-shrink: 0;
+  }
+
+  .modal-links {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .modal-links a {
+    width: 100%;
+    text-align: center;
+    font-size: 13px;
+    padding: 12px;
   }
 
 }
-
 
 
 /* ===== modelos ================================== */
@@ -1608,28 +1719,72 @@ nav{
           <div class="insta-image-wrapper">
 
             <div class="insta-slide"
-              data-title="Nueva identidad visual para @clienteA 🔥"
-              data-desc="Desarrollamos identidad completa: logo, paleta de colores, tipografía y guidelines."
-              data-likes="342 Me gusta"
-              data-project="0">
-              <img src="odc4.webp" alt="">
-            </div>
+  data-title="Gestión digital integral para ODC 🌐"
+  data-desc="Optimización de identidad visual, desarrollo web y gestión mensual de contenido para fortalecer su presencia digital."
+  data-likes="846 Me gusta"
+  data-project="0">
+  <img src="odc4.webp" alt="">
+</div>
+
 
             <div class="insta-slide"
-              data-title="Campaña digital para @clienteB 🚀"
-              data-desc="Estrategia creativa para redes sociales y pauta digital."
-              data-likes="510 Me gusta"
-              data-project="1">
-              <img src="gus5.webp" alt="">
-            </div>
+  data-title="Construcción de marca para el Dr. Gustavo Lara 🧠"
+  data-desc="Desarrollamos identidad visual desde cero y estrategia de contenido para posicionar su marca personal en redes sociales."
+  data-likes="1.1k Me gusta"
+  data-project="1">
+  <img src="gus5.webp" alt="">
+</div>
+<div class="insta-slide"
+  data-title="Branding integral para Sieramont 🌿"
+  data-desc="Desarrollamos identidad completa, presencia digital y material comercial para este condominio campestre en Valledupar."
+  data-likes="1.8k Me gusta"
+  data-project="2">
+  <img src="sm3.webp" alt="">
+</div>
+<div class="insta-slide"
+  data-title="Identidad corporativa para B&E Bandas y Estructuras 🏗️"
+  data-desc="Desarrollamos imagen de marca y brochure corporativo para fortalecer su presencia comercial."
+  data-likes="632 Me gusta"
+  data-project="3">
+  <img src="B&E1.webp" alt="">
+</div>
+<div class="insta-slide"
+  data-title="Impulso digital para Bar Necio 🍸"
+  data-desc="Rediseño de logo y gestión estratégica de redes sociales para fortalecer su identidad nocturna."
+  data-likes="1.5k Me gusta"
+  data-project="4">
+  <img src="necio2.webp" alt="">
+</div>
+<div class="insta-slide"
+  data-title="Contenido industrial para Industrias LYG 🚛"
+  data-desc="Estrategia de contenido digital para empresa especializada en estructuras de carga para camiones."
+  data-likes="524 Me gusta"
+  data-project="5">
+  <img src="lyg6.webp" alt="">
+</div>
+<div class="insta-slide"
+  data-title="Diseño de piezas para J’Burguer 🍔"
+  data-desc="Creación de piezas gráficas para redes sociales en el sector gastronómico."
+  data-likes="689 Me gusta"
+  data-project="6">
+  <img src="jb1.webp" alt="">
+</div>
+			  <div class="insta-slide"
+  data-title="Producción de Reel – Rebel Boys 👕"
+  data-desc="Creación de contenido audiovisual para marca de camisetas oversize."
+  data-likes="872 Me gusta"
+  data-project="8">
+  <img src="Rebel1.webp" alt="">
+</div>
 
-            <div class="insta-slide"
-              data-title="Producción audiovisual @clienteC 🎥"
-              data-desc="Contenido de alto impacto para Instagram y TikTok."
-              data-likes="780 Me gusta"
-              data-project="2">
-              <img src="over4.webp" alt="">
-            </div>
+<div class="insta-slide"
+  data-title="Construcción total de Overline 🚀"
+  data-desc="Desarrollo integral de marca, identidad y ecosistema digital desde cero."
+  data-likes="1.204 Me gusta"
+  data-project="7">
+  <img src="over4.webp" alt="">
+</div>
+
 
           </div>
 
@@ -1681,6 +1836,8 @@ nav{
       <div class="modal-tag">CASE STUDY</div>
       <h2 id="modalTitle"></h2>
       <p id="modalDescription"></p>
+		<div class="modal-links" id="modalLinks"></div>
+
     </div>
 
     <div class="modal-media">
@@ -2576,36 +2733,329 @@ document.addEventListener("DOMContentLoaded", function () {
 
   const modalTitle = document.getElementById("modalTitle");
   const modalDescription = document.getElementById("modalDescription");
+  const modalLinks = document.getElementById("modalLinks");
   const modalGallery = document.getElementById("modalGallery");
 
   let currentIndex = 0;
 
   const projectData = [
     {
-      title: "Nueva identidad visual para @clienteA 🔥",
-      description: "Proyecto completo de branding con desarrollo estratégico, identidad visual, manual de marca y aplicaciones digitales.",
-      media: [
-        { type: "img", src: "img/modal1.jpg" },
-        { type: "img", src: "img/modal2.jpg" },
-        { type: "video", src: "video/demo1.webm" }
-      ]
-    },
+  title: "Gestión digital integral para ODC 🌐",
+  description: `
+  ODC necesitaba fortalecer su presencia digital manteniendo
+  la esencia de su identidad original.
+
+  Nuestro trabajo incluyó:
+
+  • Ajustes y refinamiento del logo existente  
+  • Diseño y desarrollo de su página web corporativa  
+  • Gestión estratégica de redes sociales  
+  • Producción mensual de contenido visual y gráfico  
+  • Diseño de piezas para comunicación digital  
+
+  El enfoque estuvo en mejorar coherencia visual,
+  profesionalizar la presencia online y generar
+  una comunicación constante y alineada con la marca.
+  `,
+  media: [
+    { type: "img", src: "odc1.webp" },
+    { type: "img", src: "odc2.webp" },
+    { type: "img", src: "odc3.webp" },
+    { type: "img", src: "odc4.webp" },
+    { type: "img", src: "odc5.webp" },
+    { type: "img", src: "odc6.webp" },
+    { type: "img", src: "odc7.webp" },
+    { type: "img", src: "odc8.webp" },
+    { type: "img", src: "odc9.webp" },
+    { type: "img", src: "odc10.webp" },
+	{ type: "video", src: "odc01.webm", poster: "p1.webp"},
+	{ type: "video", src: "odc02.webm", poster: "p2.webp"},
+	{ type: "video", src: "odc03.webm", poster: "p3.webp"},
+	{ type: "video", src: "odc04.webm", poster: "p4.webp"}
+  ],
+  links: {
+    web: "https://www.odcsas.com.co", 
+    instagram: "https://instagram.com/odc_arq"
+  }
+},
     {
-      title: "Campaña digital para @clienteB 🚀",
-      description: "Estrategia creativa para lanzamiento de producto con pauta y contenido audiovisual.",
-      media: [
-        { type: "img", src: "img/modal3.jpg" },
-        { type: "video", src: "video/demo2.webm" }
-      ]
-    },
+  title: "Construcción de marca personal – Dr. Gustavo Lara 🧠",
+  description: `
+  El Dr. Gustavo Lara necesitaba construir una presencia digital sólida,
+  profesional y coherente con su especialidad en psiquiatría.
+
+  Nuestro trabajo incluyó:
+
+  • Desarrollo completo de identidad visual desde cero  
+  • Definición de línea gráfica para redes sociales  
+  • Creación de sistema visual profesional y minimalista  
+  • Estrategia de contenido educativo y posicionamiento  
+  • Gestión mensual de redes sociales  
+  • Diseño de piezas informativas y contenido audiovisual  
+
+  El objetivo fue posicionarlo como un referente confiable,
+  cercano y profesional dentro de su sector, fortaleciendo
+  su marca personal en el entorno digital.
+  `,
+  media: [
+    { type: "img", src: "gus1.webp" },
+    { type: "img", src: "gus2.webp" },
+    { type: "img", src: "gus3.webp" },
+    { type: "img", src: "gus4.webp" },
+    { type: "img", src: "gus5.webp" },
+	{ type: "video", src: "GUS01.webm", poster: "p5.webp"},
+	{ type: "video", src: "GUS02.webm", poster: "p6.webp"},
+	{ type: "video", src: "GUS03.webm", poster: "p7.webp"},
+	{ type: "video", src: "GUS04.webm", poster: "p8.webp"},
+	{ type: "video", src: "GUS05.webm", poster: "p9.webp"},
+	{ type: "video", src: "GUS06.webm", poster: "p10.webp"}
+  ],
+  links: {
+    instagram: "https://instagram.com/dr.gustavolara",
+  }
+},
     {
-      title: "Producción audiovisual @clienteC 🎥",
-      description: "Producción integral para redes sociales con enfoque en engagement.",
-      media: [
-        { type: "img", src: "img/modal4.jpg" },
-        { type: "img", src: "img/modal5.jpg" }
-      ]
-    }
+  title: "Desarrollo de marca integral – Sieramont Condominio Campestre 🌿",
+  description: `
+  Sieramont es un condominio campestre ubicado en Valledupar,
+  diseñado para ofrecer exclusividad, naturaleza y calidad de vida.
+
+  Nuestro equipo desarrolló una estrategia integral de marca que incluyó:
+
+  • Creación completa de identidad visual  
+  • Diseño de logo y sistema gráfico  
+  • Manual de marca y lineamientos visuales  
+  • Desarrollo de página web corporativa  
+  • Diseño de brochure comercial y piezas de venta  
+  • Estrategia y creación de contenido para redes sociales  
+  • Producción visual para posicionamiento inmobiliario  
+
+  El objetivo fue construir una marca aspiracional,
+  sólida y coherente, capaz de comunicar exclusividad,
+  confianza y valor diferencial dentro del sector inmobiliario.
+  `,
+  media: [
+    { type: "img", src: "sm1.webp" },
+    { type: "img", src: "sm2.webp" },
+    { type: "img", src: "sm3.webp" },
+    { type: "img", src: "sm4.webp" },
+    { type: "img", src: "sm5.webp" },
+    { type: "img", src: "sm6.webp" },
+    { type: "img", src: "sm7.webp" },
+    { type: "img", src: "sm8.webp" },
+    { type: "img", src: "sm9.webp" },
+	{ type: "video", src: "siera01.webm", poster: "p11.webp"},
+	{ type: "video", src: "siera02.webm", poster: "p12.webp"},
+	{ type: "video", src: "siera03.webm", poster: "p13.webp"},
+  ],
+  links: {
+    instagram: "https://instagram.com/sieramont.condominio"
+  }
+},
+	{
+  title: "Desarrollo de identidad corporativa – B&E Bandas y Estructuras 🏗️",
+  description: `
+  B&E Bandas y Estructuras necesitaba consolidar una imagen
+  corporativa sólida que reflejara profesionalismo,
+  experiencia técnica y confiabilidad en el sector industrial.
+
+  Nuestro trabajo incluyó:
+
+  • Desarrollo de identidad visual corporativa  
+  • Diseño de logotipo y sistema gráfico  
+  • Definición de línea visual industrial y profesional  
+  • Diseño y diagramación de brochure comercial  
+  • Creación de piezas gráficas para presentación empresarial  
+
+  El resultado fue una marca estructurada,
+  coherente y preparada para fortalecer su
+  posicionamiento frente a clientes y aliados estratégicos.
+  `,
+  media: [
+    { type: "img", src: "B&E1.webp" },
+    { type: "img", src: "B&E2.webp" },
+    { type: "img", src: "B&E3.webp" },
+    { type: "img", src: "B&E4.webp" },
+    { type: "img", src: "B&E5.webp" },
+    { type: "img", src: "B&E6.webp" }
+  ],
+},
+	{
+  title: "Rebranding y gestión digital – Bar Necio 🍸",
+  description: `
+  Bar Necio buscaba reforzar su identidad visual
+  y consolidar una presencia digital más atractiva
+  y coherente con su concepto nocturno.
+
+  Nuestro trabajo incluyó:
+
+  • Rediseño estratégico del logotipo  
+  • Ajustes visuales para modernizar la marca  
+  • Definición de línea gráfica para redes sociales  
+  • Creación de contenido visual dinámico  
+  • Gestión mensual de redes sociales  
+  • Diseño de piezas promocionales para eventos  
+
+  El objetivo fue potenciar la personalidad del bar,
+  aumentar el engagement en redes y fortalecer
+  su posicionamiento dentro del sector nocturno.
+  `,
+  media: [
+    { type: "img", src: "necio1.webp" },
+    { type: "img", src: "necio2.webp" },
+    { type: "img", src: "necio3.webp" },
+    { type: "img", src: "necio4.webp" },
+    { type: "img", src: "necio5.webp" },
+    { type: "img", src: "necio6.webp" },
+    { type: "img", src: "necio7.webp" },
+    { type: "img", src: "necio8.webp" },
+    { type: "img", src: "necio9.webp" },
+    { type: "img", src: "necio10.webp" },
+    { type: "img", src: "necio11.webp" },
+	{ type: "video", src: "NECIO1.webm", poster: "p14.webp"},
+	{ type: "video", src: "NECIO2.webm", poster: "p15.webp"},
+	{ type: "video", src: "NECIO3.webm", poster: "p16.webp"}
+  ],
+},
+    {title: "Estrategia de contenido – Industrias LYG 🚛",
+  description: `
+  Industrias LYG es una empresa especializada en
+  fabricación y adecuación de estructuras de carga
+  para camiones y transporte pesado.
+
+  Nuestro trabajo estuvo enfocado en fortalecer
+  su presencia digital dentro del sector industrial,
+  mostrando procesos, resultados y capacidad técnica.
+
+  Incluimos:
+
+  • Desarrollo de línea gráfica para sector transporte  
+  • Diseño de piezas enfocadas en carrocerías y estructuras  
+  • Creación de contenido visual de procesos de fabricación  
+  • Comunicación orientada a clientes del sector logístico  
+  • Gestión estratégica de redes sociales  
+
+  El objetivo fue posicionar la marca como una empresa
+  sólida, técnica y confiable dentro del mercado
+  de soluciones para transporte de carga.
+  `,
+  media: [
+    { type: "img", src: "lyg1.webp" },
+    { type: "img", src: "lyg2.webp" },
+    { type: "img", src: "lyg3.webp" },
+    { type: "img", src: "lyg4.webp" },
+    { type: "img", src: "lyg5.webp" },
+    { type: "img", src: "lyg6.webp" },
+    { type: "img", src: "lyg7.webp" },
+	{ type: "video", src: "LYG01.webm", poster: "p17.webp"},
+	{ type: "video", src: "LYG02.webm", poster: "p18.webp"}
+  ],
+},
+	{
+  title: "Diseño de piezas para redes – J’Burguer 🍔",
+  description: `
+  J’Burguer es una marca del sector gastronómico
+  enfocada en hamburguesas artesanales.
+
+  Nuestra participación consistió en la creación
+  de piezas gráficas para redes sociales,
+  diseñadas para destacar productos,
+  promociones y fortalecer la identidad visual.
+
+  Incluimos:
+
+  • Diseño de piezas promocionales  
+  • Adaptación gráfica al estilo gastronómico  
+  • Composición visual enfocada en producto  
+  • Optimización para formatos digitales  
+
+  El objetivo fue generar mayor impacto visual
+  y coherencia estética dentro de su comunicación digital.
+  `,
+  media: [
+    { type: "img", src: "jb1.webp" },
+    { type: "img", src: "jb2.webp" }
+  ],
+},
+	{
+  title: "Producción de Reel – Rebel Boys 👕",
+  description: `
+  Rebel Boys es una marca de camisetas oversize
+  con enfoque en estilo urbano y actitud juvenil.
+
+  Nuestra participación consistió en la producción
+  de un Reel promocional diseñado para potenciar
+  el alcance orgánico y reforzar su identidad visual.
+
+  El trabajo incluyó:
+
+  • Conceptualización del contenido  
+  • Dirección creativa  
+  • Grabación y edición del Reel  
+  • Adaptación a formato vertical para redes  
+  • Enfoque visual alineado a estética urbana  
+
+  El objetivo fue generar mayor visibilidad,
+  conectar con su público objetivo
+  y fortalecer el posicionamiento de marca
+  dentro del segmento streetwear.
+  `,
+  media: [
+	{ type: "video", src: "rebel.webm", poster: "p19.webp"}
+  ],
+},
+	{
+  title: "Overline – Construcción de marca desde cero 🚀",
+  description: `
+  Overline nació como un proyecto estratégico
+  desarrollado completamente desde cero,
+  donde construimos cada elemento de la marca
+  desde su concepto hasta su presencia digital.
+
+  El proceso incluyó:
+
+  • Desarrollo de naming y concepto de marca  
+  • Diseño de identidad visual completa  
+  • Construcción de línea gráfica estratégica  
+  • Diseño y desarrollo de página web  
+  • Creación de portafolio digital  
+  • Estrategia de contenido para redes sociales  
+  • Definición de tono comunicacional  
+
+  Overline representa nuestra capacidad
+  para construir marcas sólidas,
+  coherentes y preparadas para competir
+  en entornos digitales modernos.
+
+  No fue solo diseño.
+  Fue estrategia, estructura y visión.
+  `,
+  media: [
+    { type: "img", src: "over1.webp" },
+    { type: "img", src: "over2.webp" },
+    { type: "img", src: "over2.webp" },
+    { type: "img", src: "over4.webp" },
+    { type: "img", src: "over5.webp" },
+    { type: "img", src: "over6.webp" },
+    { type: "img", src: "over7.webp" },
+    { type: "img", src: "over8.webp" },
+    { type: "img", src: "over9.webp" },
+    { type: "img", src: "over10.webp" },
+    { type: "img", src: "over11.webp" },
+    { type: "img", src: "over12.webp" },
+	{ type: "video", src: "over1.webm", poster: "p20.webp"},
+	{ type: "video", src: "over2.webm", poster: "p21.webp"},
+	{ type: "video", src: "over3.webm", poster: "p22.webp"},
+	{ type: "video", src: "over4.webm", poster: "p23.webp"},
+	{ type: "video", src: "over5.webm", poster: "p24.webp"},
+	{ type: "video", src: "over6.webm", poster: "p25.webp"},
+	{ type: "video", src: "over7.webm", poster: "p26.webp"}
+  ],
+  links: {
+    instagram: "https://instagram.com/overline",
+    website: "https://overline.com"
+  }
+}
   ];
 
   function updateInfo(index) {
@@ -2647,6 +3097,27 @@ openModalBtn.addEventListener("click", () => {
 
   modalTitle.textContent = project.title;
   modalDescription.textContent = project.description;
+modalLinks.innerHTML = "";
+
+if (project.links) {
+
+  if (project.links.web) {
+    const webLink = document.createElement("a");
+    webLink.href = project.links.web;
+    webLink.target = "_blank";
+    webLink.textContent = "🌐 Visitar sitio web";
+    modalLinks.appendChild(webLink);
+  }
+
+  if (project.links.instagram) {
+    const instaLink = document.createElement("a");
+    instaLink.href = project.links.instagram;
+    instaLink.target = "_blank";
+    instaLink.textContent = "📱 Ver Instagram";
+    modalLinks.appendChild(instaLink);
+  }
+
+}
 
   modalMainMedia.innerHTML = "";
   modalThumbnails.innerHTML = "";
@@ -2670,7 +3141,18 @@ openModalBtn.addEventListener("click", () => {
       modalMainMedia.appendChild(element.cloneNode(true));
     }
 
-    const thumb = element.cloneNode(true);
+    let thumb;
+
+if (item.type === "img") {
+  thumb = document.createElement("img");
+  thumb.src = item.src;
+}
+
+if (item.type === "video") {
+  thumb = document.createElement("img");
+  thumb.src = item.poster || "img/video-thumb.jpg"; // imagen preview
+}
+
     thumb.classList.add("thumbnail");
 
     if (index === 0) {
